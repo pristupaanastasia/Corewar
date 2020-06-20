@@ -13,7 +13,7 @@
 
 NAME = libft.a
 
-CC = clang -Wall -Wextra -Werror
+CC = gcc -Wall -Wextra -Werror
 
 SRC = *.c
 
