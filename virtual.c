@@ -167,32 +167,43 @@ t_champ parse(t_champ champ)
 	return(solve);
 }
 */
+t_car *rewrite_car(t_car *car)
+{
+	t_car *copy;
+	t_car *start;
+	copy = car;
+	start = copy->next;
+	while(car->next)
+	{
+		car = car->next;
+	}
+	car->next = copy;
+	copy->next = NULL;
+	return(start);
+}
 void game_start(t_core *champ)
 {
 	unsigned int cycle =0;
 	//unsigned int prog_count;
 	unsigned int i =0;
-	while (champ->player)
+	while (champ->player && i < 51)
 	{
-		while(i < 7)
+		if (champ->player->time < 0)
 		{
-			if (champ->player->time < 0)
-			{
-				champ->player->time = op_tab[arena[champ->player->pc] - 1].time;
-				printf("\n char %d\n",champ->player->time);
+			champ->player->time = op_tab[arena[champ->player->pc] - 1].time;
+			printf("\n char %d\n",champ->player->time);
 				//champ->player->time = 
-			}
-			if (champ->player->time == 0)
-			{
-				
-			}
-			print_char(arena[champ->player->pc + i]);
-			i++;
 		}
-		i=0;
-		printf("\n");
+		if (champ->player->time == 0)
+		{
+			op_tab[arena[champ->player->pc] - 1].f(champ->player);
+		}
+		champ->player->time = champ->player->time - 1;
+		printf("\n time %d\n",champ->player->time);
+		i++;
+		champ->player = rewrite_car(champ->player);
 		//prog_count = translate_reg(champ->player->pc);
-		champ->player = champ->player->next;
+		//champ->player = champ->player->next;
 	}
 }
 

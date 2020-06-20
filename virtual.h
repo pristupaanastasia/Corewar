@@ -75,4 +75,5 @@ t_car	*ft_lldi(t_car *car);
 t_car	*ft_lfork(t_car *car);
 t_car	*ft_aff(t_car *car);
 void print_arena();
+void print_char(char k);
 #endif
