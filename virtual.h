@@ -33,7 +33,7 @@ typedef struct s_car
 	int cycle_live;
 	unsigned int pc;
 	int time;
-	t_reg reg[REG_NUMBER];
+	t_reg reg[REG_NUMBER + 1];
 	struct s_car	*next;
 
 }               t_car;

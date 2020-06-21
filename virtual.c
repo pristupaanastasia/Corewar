@@ -186,16 +186,19 @@ void game_start(t_core *champ)
 	unsigned int cycle =0;
 	//unsigned int prog_count;
 	unsigned int i =0;
-	while (champ->player && i < 51)
+	while (champ->player && i < 100)
 	{
 		if (champ->player->time < 0)
 		{
 			champ->player->time = op_tab[arena[champ->player->pc] - 1].time;
 			printf("\n char %d\n",champ->player->time);
+			printf("OPER %d\n",arena[champ->player->pc]);
 				//champ->player->time = 
 		}
 		if (champ->player->time == 0)
 		{
+			if (arena[champ->player->pc] == 1)
+				champ->player->cycle_live = i;
 			op_tab[arena[champ->player->pc] - 1].f(champ->player);
 		}
 		champ->player->time = champ->player->time - 1;
