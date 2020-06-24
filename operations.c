@@ -69,6 +69,23 @@ t_car *to_reg_from_int(t_car *car,int reg,unsigned int tr)
 	return(car);
 }
 
+unsigned int to_int_from_reg(t_car *car,int reg)
+{
+	unsigned int solve = 0;
+	unsigned int n = 0;
+	int i = 0;
+	while(i < REG_SIZE)
+	{
+		n = (unsigned int)car->reg[reg].reg[i];
+		n = n & 0x000000ff;
+		solve = solve | n;
+		i++;
+		if( i < REG_SIZE)
+			solve = solve << 8;
+	}
+	return(solve);
+}
+
 t_car	*ft_live(t_car *car)
 {
 //	car->time = op_tab[0].time;
@@ -97,6 +114,16 @@ t_car	*ft_st(t_car *car)
 t_car	*ft_add(t_car *car)
 {
 	//if ()
+	car->carry = 1;
+	int *arg;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],4);
+	unsigned int reg1 = to_int_from_reg(car,arena[car->pc + 2]);
+	unsigned int reg2 = to_int_from_reg(car,arena[car->pc + 3]);
+	reg1 = reg1 + reg2;
+	car = to_reg_from_int(arena[car->pc + 4],reg1);
+	car->pc = car->pc + 2 + arg[0] + arg[1] + arg[2];
+	free(arg);
 	return(car);
 }
 
@@ -128,7 +155,7 @@ t_car	*ft_zjmp(t_car *car)
 	unsigned int indir;
 
 	indir = to_int(arena[car->pc + 1],arena[car->pc + 2]);
-	if (arena[car->pc + indir] != 0)
+	if (arena[car->pc + indir] != 0 && car->carry == 1)
 	{
 		car->pc = car->pc + indir;
 	}
@@ -203,6 +230,7 @@ t_car	*ft_lfork(t_car *car)
 		car = car->next;
 	}
 	car->next = copy;
+	start->pc = start->pc + 1 + T_DIR;
 	return(start);
 }
 t_car	*ft_aff(t_car *car)
@@ -241,5 +269,6 @@ t_car	*ft_fork(t_car *car)
 		car = car->next;
 	}
 	car->next = copy;
+	start->pc = start->pc + 1 + T_DIR;
 	return(start);
 }
