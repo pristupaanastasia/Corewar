@@ -69,6 +69,22 @@ t_car *to_reg_from_int(t_car *car,int reg,unsigned int tr)
 	return(car);
 }
 
+unsigned int to_int_size(int start, int size)
+{
+	int i = 0;
+	unsigned int solve = 0;
+	while(i < size)
+	{
+		n = (unsigned int)arena[start + i];
+		n = n & 0x000000ff;
+		solve = solve | n;
+		i++;
+		if( i < size)
+			solve = solve << 8;
+	}
+	return(solve);
+}
+
 unsigned int to_int_from_reg(t_car *car,int reg)
 {
 	unsigned int solve = 0;
@@ -99,15 +115,32 @@ t_car	*ft_ld(t_car *car)
 	//if ()
 	car->carry = 1;
 	int *arg;
+	unsigned int in1;
 	arg = malloc(sizeof(int) * 3);
 	arg = read_arg(arg,arena[car->pc + 1],4);
-	
+	in1 = to_int_size(car->pc + 2, 4);
+	if ((arena[car->pc + 1] & 0xc0) == 0xc0)
+		in1 = arena[in1];
+	in1 = in1 % IDX_MOD;
+	car = to_reg_from_int(car,arena[car->pc + 6], in1);
+	car->pc = car->pc + 2 + arg[0] + arg[1];
 	return(car);
 }
 
 t_car	*ft_st(t_car *car)
 {
 	//if ()
+	int *arg;
+	unsigned int in1;
+	unsigned int in2;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],4);
+	in1 = arena[car->pc + 2];
+	in1 = in1 & 0x000000ff;
+	in2 = to_int_size(car->pc + 3, 4);
+	in1 = to_int_from_reg(car,in1);
+	arena[car->pc + (in2 % IDX_MOD)] = in1;
+	car->pc = car->pc + 2 + arg[0] + arg[1];
 	return(car);
 }
 
@@ -120,8 +153,8 @@ t_car	*ft_add(t_car *car)
 	arg = read_arg(arg,arena[car->pc + 1],4);
 	unsigned int reg1 = to_int_from_reg(car,arena[car->pc + 2]);
 	unsigned int reg2 = to_int_from_reg(car,arena[car->pc + 3]);
-	reg1 = reg1 + reg2;
-	car = to_reg_from_int(arena[car->pc + 4],reg1);
+	reg1 = reg1 & reg2;
+	car = to_reg_from_int(car, arena[car->pc + 4], reg1);
 	car->pc = car->pc + 2 + arg[0] + arg[1] + arg[2];
 	free(arg);
 	return(car);
@@ -129,24 +162,129 @@ t_car	*ft_add(t_car *car)
 
 t_car	*ft_sub(t_car *car)
 {
-	//if ()
+	car->carry = 1;
+	int *arg;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],4);
+	unsigned int reg1 = to_int_from_reg(car,arena[car->pc + 2]);
+	unsigned int reg2 = to_int_from_reg(car,arena[car->pc + 3]);
+	reg1 = reg1 - reg2;
+	car = to_reg_from_int(car, arena[car->pc + 4], reg1);
+	car->pc = car->pc + 2 + arg[0] + arg[1] + arg[2];
+	free(arg);
 	return(car);
 }
 
 t_car	*ft_and(t_car *car)
 {
-	//if ()
+	car->carry = 1;
+	int *arg;
+	int i = 2;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],4);
+	unsigned int in1;
+	unsigned int in2;
+	if ((arena[car->pc + 1] & 0xc0) == 0x40)
+	{
+		in1 = to_int_from_reg(car,arena[car->pc + i++]);
+	}
+	if ((arena[car->pc + 1] & 0xc0) == 0x80)
+		in1 = to_int(arena[car->pc + i++],arena[car->pc + i++])
+	if (((arena[car->pc + 1] & 0xc0) == 0xc0)
+	{
+		in1 = to_int_size(car->pc + i,4);
+		in1 = arena[in1];
+		i = i+ 4;
+	}
+	if ((arena[car->pc + 1] & 0x30) == 0x10)
+		in2 = to_int_from_reg(car,arena[car->pc + i++]);
+	if ((arena[car->pc + 1] & 0x30) == 0x20)
+		in2 = to_int(arena[car->pc + i++],arena[car->pc + i++])
+	if (((arena[car->pc + 1] & 0x30) == 0x30)
+	{
+		in2 = to_int_size(car->pc + i,4);
+		in2 = arena[in1];
+		i = i+ 4;
+	}
+	in1= in1 & in2;
+	car = to_reg_from_int(car, car->pc + i, in1);
+	car->pc = car->pc + 2 + arg[0] + arg[1] + arg[2];
+	free(arg);
 	return(car);
 }
 
 t_car	*ft_or(t_car *car)
 {
-	//if ()
+	car->carry = 1;
+	int *arg;
+	int i = 2;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],4);
+	unsigned int in1;
+	unsigned int in2;
+	if ((arena[car->pc + 1] & 0xc0) == 0x40)
+	{
+		in1 = to_int_from_reg(car,arena[car->pc + i++]);
+	}
+	if ((arena[car->pc + 1] & 0xc0) == 0x80)
+		in1 = to_int(arena[car->pc + i++],arena[car->pc + i++])
+	if (((arena[car->pc + 1] & 0xc0) == 0xc0)
+	{
+		in1 = to_int_size(car->pc + i,4);
+		in1 = arena[in1];
+		i = i+ 4;
+	}
+	if ((arena[car->pc + 1] & 0x30) == 0x10)
+		in2 = to_int_from_reg(car,arena[car->pc + i++]);
+	if ((arena[car->pc + 1] & 0x30) == 0x20)
+		in2 = to_int(arena[car->pc + i++],arena[car->pc + i++])
+	if (((arena[car->pc + 1] & 0x30) == 0x30)
+	{
+		in2 = to_int_size(car->pc + i,4);
+		in2 = arena[in1];
+		i = i+ 4;
+	}
+	in1= in1 | in2;
+	car = to_reg_from_int(car, arena[car->pc + i], in1);
+	car->pc = car->pc + 2 + arg[0] + arg[1] + arg[2];
+	free(arg);
 	return(car);
 }
 t_car	*ft_xor(t_car *car)
 {
-	//if ()
+	car->carry = 1;
+	int *arg;
+	int i = 2;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],4);
+	unsigned int in1;
+	unsigned int in2;
+	if ((arena[car->pc + 1] & 0xc0) == 0x40)
+	{
+		in1 = to_int_from_reg(car,arena[car->pc + i++]);
+	}
+	if ((arena[car->pc + 1] & 0xc0) == 0x80)
+		in1 = to_int(arena[car->pc + i++],arena[car->pc + i++])
+	if (((arena[car->pc + 1] & 0xc0) == 0xc0)
+	{
+		in1 = to_int_size(car->pc + i,4);
+		in1 = arena[in1];
+		i = i+ 4;
+	}
+	if ((arena[car->pc + 1] & 0x30) == 0x10)
+		in2 = to_int_from_reg(car,arena[car->pc + i++]);
+	if ((arena[car->pc + 1] & 0x30) == 0x20)
+		in2 = to_int(arena[car->pc + i++],arena[car->pc + i++])
+	if (((arena[car->pc + 1] & 0x30) == 0x30)
+	{
+		in2 = to_int_size(car->pc + i,4);
+		in2 = arena[in1];
+		i = i+ 4;
+	}
+	in1= in1 ^ in2;
+	car = to_reg_from_int(car, arena[car->pc + i], in1);
+	car->pc = car->pc + 2 + arg[0] + arg[1] + arg[2];
+	free(arg);
 	return(car);
 }
 t_car	*ft_zjmp(t_car *car)
@@ -161,42 +299,34 @@ t_car	*ft_zjmp(t_car *car)
 	}
 	return(car);
 }
-t_car	*ft_ldi(t_car *car)
+t_car	*ft_ldi(t_car *car)//че то здесь какой то пиздец
 {
-	//if ()
+
+	int *arg;
+	unsigned int in1;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],2);
+	in1 = to_int_size(car->pc + 2, 4);
+	if ((arena[car->pc + 1] & 0xc0) == 0xc0)
+		in1 = arena[in1];
+	car = to_reg_from_int(car,arena[car->pc + 6], in1);
+	car->pc = car->pc + 2 + arg[0] + arg[1];
 	return(car);
 }
-t_car	*ft_sti(t_car *car)
+t_car	*ft_sti(t_car *car)//здесь тоже
 {
-	printf("\n kod \n");
-	print_char(arena[car->pc]);
-	printf("\n kod  tipov\n");
 	int *arg;
 	unsigned int in1;
 	unsigned int in2;
 	arg = malloc(sizeof(int) * 3);
 	arg = read_arg(arg,arena[car->pc + 1],2);
-	print_char(arena[car->pc + 1]);
-	printf("\n");
-	print_char(arena[car->pc + 1]& 0x0c);
-	
-	printf("\n arg %d %d %d \n",arg[0],arg[1],arg[2]);
-	printf("\n arg n1\n");
-	print_char(arena[car->pc + 2]);
-	if (arena[car->pc + 2] < REG_SIZE )
+	if (arena[car->pc + 2] < REG_SIZE)
 	{
 		in1 = to_int(arena[car->pc + 3],arena[car->pc + 4]);
 		in2 = to_int(arena[car->pc + 5],arena[car->pc + 6]);
-		car = to_reg_from_int(car,arena[car->pc + 2], in1 + in2);
+		if ()
 	}
-	printf("REG %x\n",car->reg[arena[car->pc + 2]].reg[REG_SIZE -1]);
 	car->pc = car->pc + 2 + arg[0] + arg[1] + arg[2];
-	printf("\n arg n2\n");
-	print_char(arena[car->pc + 3]);
-	print_char(arena[car->pc + 4]);
-	printf("\n arg n3\n");
-	print_char(arena[car->pc + 5]);
-	print_char(arena[car->pc + 6]);
 	//if ()
 	free(arg);
 	return(car);
@@ -204,7 +334,16 @@ t_car	*ft_sti(t_car *car)
 
 t_car	*ft_lld(t_car *car)
 {
-	//if ()
+	car->carry = 1;
+	int *arg;
+	unsigned int in1;
+	arg = malloc(sizeof(int) * 3);
+	arg = read_arg(arg,arena[car->pc + 1],4);
+	in1 = to_int_size(car->pc + 2, 4);
+	if ((arena[car->pc + 1] & 0xc0) == 0xc0)
+		in1 = arena[in1];
+	car = to_reg_from_int(car,arena[car->pc + 6], in1);
+	car->pc = car->pc + 2 + arg[0] + arg[1];
 	return(car);
 }
 t_car	*ft_lldi(t_car *car)
@@ -230,9 +369,9 @@ t_car	*ft_lfork(t_car *car)
 		car = car->next;
 	}
 	car->next = copy;
-	start->pc = start->pc + 1 + T_DIR;
 	return(start);
 }
+
 t_car	*ft_aff(t_car *car)
 {
 	//if ()
@@ -269,6 +408,5 @@ t_car	*ft_fork(t_car *car)
 		car = car->next;
 	}
 	car->next = copy;
-	start->pc = start->pc + 1 + T_DIR;
 	return(start);
 }
