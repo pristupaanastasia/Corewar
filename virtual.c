@@ -186,7 +186,7 @@ void game_start(t_core *champ)
 	unsigned int cycle =0;
 	//unsigned int prog_count;
 	unsigned int i =0;
-	while (champ->player && i < 100)
+	while (champ->player && i < 300)
 	{
 		if (champ->player->time < 0)
 		{
@@ -205,6 +205,8 @@ void game_start(t_core *champ)
 		printf("\n time %d\n",champ->player->time);
 		i++;
 		champ->player = rewrite_car(champ->player);
+		if (!champ->player)
+			printf("NOOOOOOOO");
 		//prog_count = translate_reg(champ->player->pc);
 		//champ->player = champ->player->next;
 	}
