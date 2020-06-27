@@ -1,16 +1,16 @@
-CW = cwar
+CW = corewar
 MAKE = make
 LIB = ./libft/libft.a
 
 SRC = virtual.c op.c operations.c
-HEADER = virtual.h op.h
+HEADER = .
 OBJ = $(SRC:.c=.o)
 all: $(CW)
 
 %.o: %.c
 	gcc -c -o $@ $< -g
 $(CW): $(LIB) $(OBJ)
-	gcc -I $(HEADER) $(LIB)  $(SRC) -g 
+	gcc -o $(CW) -I $(HEADER) $(LIB) $(OBJ) -g
 $(LIB):
 	$(MAKE) -C ./libft/
 clean:

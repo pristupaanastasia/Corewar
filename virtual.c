@@ -181,35 +181,76 @@ t_car *rewrite_car(t_car *car)
 	copy->next = NULL;
 	return(start);
 }
+
+t_car *time_to_die(t_car *car)
+{
+	t_car *new;
+
+	new = car->next;
+	free(car);
+	return(new);
+}
+
 void game_start(t_core *champ)
 {
-	unsigned int cycle =0;
+	int cycle =0;
 	//unsigned int prog_count;
 	unsigned int i =0;
-	while (champ->player && i < 300)
+	int cycles_to_die = CYCLE_TO_DIE;
+	int nbr_live =0;
+	int checks = 0;
+	int last = 0;
+	while (champ->player)
 	{
-		if (champ->player->time < 0)
+		if (cycle != 0 && cycle % cycles_to_die == 0)
+		{
+			printf("cycle_co die %d\n",cycles_to_die);
+			while (champ->player && ((champ->player->cycle_live < cycle - cycles_to_die) || cycles_to_die <= 0) && (last = champ->player->num) ==champ->player->num)
+				champ->player = time_to_die(champ->player);
+			//if(champ->player)
+			//	last = champ->player->num;
+			if (nbr_live <= NBR_LIVE || checks >= MAX_CHECKS)
+			{
+				cycles_to_die = cycles_to_die - CYCLE_DELTA;
+				nbr_live = 0;
+				checks = 0;
+			}
+			else
+			{
+				checks++;
+			}
+		}
+		if (champ->player && champ->player->time < 0)
 		{
 			champ->player->time = op_tab[arena[champ->player->pc] - 1].time;
-			printf("\n char %d\n",champ->player->time);
-			printf("OPER %d\n",arena[champ->player->pc]);
+			//printf("\n char %d\n",champ->player->time);
+			//printf("OPER %d\n",arena[champ->player->pc]);
 				//champ->player->time = 
 		}
-		if (champ->player->time == 0)
+		if (champ->player && champ->player->time == 0)
 		{
 			if (arena[champ->player->pc] == 1)
-				champ->player->cycle_live = i;
+			{
+				champ->player->cycle_live = cycle;
+				nbr_live++;
+			}
 			op_tab[arena[champ->player->pc] - 1].f(champ->player);
 		}
-		champ->player->time = champ->player->time - 1;
-		printf("\n time %d\n",champ->player->time);
-		i++;
-		champ->player = rewrite_car(champ->player);
-		if (!champ->player)
-			printf("NOOOOOOOO");
+		if (champ->player)
+		{
+			champ->player->time = champ->player->time - 1;
+			//printf("\n time %d\n",champ->player->time);
+			i++;
+			champ->player = rewrite_car(champ->player);
+			if (!champ->player)
+				printf("NOOOOOOOO");
+			if (i % champ->num_ch == 0)
+				cycle++;
+		}
 		//prog_count = translate_reg(champ->player->pc);
 		//champ->player = champ->player->next;
 	}
+	printf("last %d",last);
 }
 
 unsigned int change_arena(t_champ champ, int n,int num_ch)
