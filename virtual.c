@@ -206,7 +206,10 @@ void game_start(t_core *champ)
 		{
 			printf("cycle_co die %d\n",cycles_to_die);
 			while (champ->player && ((champ->player->cycle_live < cycle - cycles_to_die) || cycles_to_die <= 0) && (last = champ->player->num) ==champ->player->num)
+			{
+				printf("champ->player->num %d\n", champ->player->num);
 				champ->player = time_to_die(champ->player);
+			}
 			//if(champ->player)
 			//	last = champ->player->num;
 			if (nbr_live <= NBR_LIVE || checks >= MAX_CHECKS)
