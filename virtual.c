@@ -238,16 +238,24 @@ void game_start(t_core *champ)
 				nbr_live++;
 			}
 			op_tab[arena[champ->player->pc] - 1].f(champ->player);
+			printf("INSTR %s  player %d\n",op_tab[arena[champ->player->pc] - 1].name,champ->player->num);
 		}
 		if (champ->player)
 		{
 			champ->player->time = champ->player->time - 1;
 			//printf("\n time %d\n",champ->player->time);
 			i++;
-			champ->player = rewrite_car(champ->player);
+			if (champ->player->next)
+				champ->player = rewrite_car(champ->player);
+			else
+			{
+				printf(" WIIIIN %d",champ->player->num);
+				free(champ->player);
+				champ->player = NULL;
+			}
 			if (!champ->player)
 				printf("NOOOOOOOO");
-			if (i % champ->num_ch == 0)
+			if (i % (champ->num_ch - 1) == 0)
 				cycle++;
 		}
 		//prog_count = translate_reg(champ->player->pc);
@@ -276,6 +284,24 @@ unsigned int change_arena(t_champ champ, int n,int num_ch)
 	return(start);
 }
 
+t_car *init_reg(t_car *car)
+{
+	int i =0;
+	int j =0;
+	while(i <= REG_NUMBER )
+	{
+		while(j < REG_SIZE)
+		{
+			car->reg[i].reg[j] = '\0';
+			j++;
+		}
+		j=0;
+		i++;
+	}
+	return(car);
+
+}
+
 void arena_set(t_core *champ)
 {
 	int i =champ->num_ch;
@@ -295,6 +321,7 @@ void arena_set(t_core *champ)
 				champ->player->num = champ->champions[j].num;
 				champ->player->pc = change_arena(champ->champions[j],i,champ->num_ch);
 				champ->player->time = -1;
+				champ->player = init_reg(champ->player);
 				printf("num %d|\n",champ->player->num);
 				champ->player->next = malloc(sizeof(t_car));
 				champ->player = champ->player->next;

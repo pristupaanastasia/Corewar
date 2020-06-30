@@ -22,7 +22,6 @@ typedef struct s_champ
 
 typedef struct s_reg
 {
-	int num;
 	char reg[REG_SIZE];
 }               t_reg;
 
