@@ -75,4 +75,5 @@ t_car	*ft_lfork(t_car *car);
 t_car	*ft_aff(t_car *car);
 void print_arena();
 void print_char(char k);
+t_car *to_reg_from_int(t_car *car,int reg,int tr);
 #endif

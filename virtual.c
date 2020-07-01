@@ -191,6 +191,29 @@ t_car *time_to_die(t_car *car)
 	return(new);
 }
 
+t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
+{
+	t_car *buf;
+	buf = car;
+	while (car && (car->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
+	{
+		printf("champ->player->num %d\n", car->num);
+		car = time_to_die(car);
+		champ->num_ch = champ->num_ch - 1;
+	}
+	buf = car;
+	while(car->next)
+	{
+		while (car->next && (car->next->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
+		{
+			car->next = time_to_die(car->next);
+			champ->num_ch = champ->num_ch - 1;
+		}
+		car = car->next;
+	}
+	return(buf);
+}
+
 void game_start(t_core *champ)
 {
 	int cycle =0;
@@ -200,28 +223,35 @@ void game_start(t_core *champ)
 	int nbr_live =0;
 	int checks = 0;
 	int last = 0;
+	int end_cycle = cycles_to_die;
+	t_car *buf;
 	while (champ->player)
 	{
-		if (cycle != 0 && cycle % cycles_to_die == 0)
+		if ((cycles_to_die <= 0) || (cycle == end_cycle))
 		{
+			champ->player = check_die(champ->player,cycle,cycles_to_die,champ);
 			printf("cycle_co die %d\n",cycles_to_die);
-			while (champ->player && ((champ->player->cycle_live < cycle - cycles_to_die) || cycles_to_die <= 0) && (last = champ->player->num) ==champ->player->num)
+			/*while (champ->player && (champ->player->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )) && (last = champ->player->num) ==champ->player->num)
 			{
-				printf("champ->player->num %d\n", champ->player->num);
-				champ->player = time_to_die(champ->player);
-			}
+					printf("champ->player->num %d\n", champ->player->num);
+					champ->player = time_to_die(champ->player);
+					checks = 0;
+					nbr_live = 0;
+			}*/
 			//if(champ->player)
 			//	last = champ->player->num;
-			if (nbr_live <= NBR_LIVE || checks >= MAX_CHECKS)
+
+			if (nbr_live >= NBR_LIVE || checks >= MAX_CHECKS)
 			{
 				cycles_to_die = cycles_to_die - CYCLE_DELTA;
-				nbr_live = 0;
 				checks = 0;
 			}
 			else
 			{
 				checks++;
 			}
+			end_cycle = cycle + cycles_to_die + 1;
+			nbr_live = 0;
 		}
 		if (champ->player && champ->player->time < 0)
 		{
@@ -237,8 +267,10 @@ void game_start(t_core *champ)
 				champ->player->cycle_live = cycle;
 				nbr_live++;
 			}
+			if(arena[champ->player->pc] == 15 || arena[champ->player->pc] == 12)
+				champ->num_ch = champ->num_ch + 1;
 			op_tab[arena[champ->player->pc] - 1].f(champ->player);
-			printf("INSTR %s  player %d\n",op_tab[arena[champ->player->pc] - 1].name,champ->player->num);
+			//printf("INSTR %s  player %d\n",op_tab[arena[champ->player->pc] - 1].name,champ->player->num);
 		}
 		if (champ->player)
 		{
@@ -323,6 +355,7 @@ void arena_set(t_core *champ)
 				champ->player->time = -1;
 				champ->player = init_reg(champ->player);
 				printf("num %d|\n",champ->player->num);
+				champ->player = to_reg_from_int(champ->player, 1, - champ->player->num);
 				champ->player->next = malloc(sizeof(t_car));
 				champ->player = champ->player->next;
 				champ->player->num = -1;
