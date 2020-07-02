@@ -57,6 +57,13 @@ typedef struct s_op
 	t_car *(*f)(t_car *car);
 }				t_op;
 
+typedef struct s_parse
+{
+	int dump;
+	int d;
+
+}				t_parse;
+
 t_car	*ft_live(t_car *car);
 t_car	*ft_ld(t_car *car);
 t_car	*ft_st(t_car *car);

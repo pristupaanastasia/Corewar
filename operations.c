@@ -19,8 +19,7 @@ t_car *copy_car(t_car *copy,t_car *car)
 	copy->num = car->num;
 	copy->carry = car->carry;
 	copy->cycle_live = car->cycle_live;
-	copy->time = car->time;
-	copy->pc = car->pc;
+	copy->time = -1;
 	while(i < REG_NUMBER)
 	{
 		while(j < REG_SIZE)
