@@ -83,7 +83,7 @@ t_champ parse(t_champ champ)
 		if (i < 4)
 			champ.mem.magic = champ.mem.magic << 8;
 	}
-	printf("magic %x\n",champ.mem.magic);
+	//printf("magic %x\n",champ.mem.magic);
 	while (j < PROG_NAME_LENGTH)
 	{
 		champ.mem.prog_name[j] = champ.buf[i];
@@ -91,21 +91,21 @@ t_champ parse(t_champ champ)
 		j++;
 	}
 	i = i+4;
-	printf("name %s",champ.mem.prog_name);
+	//printf("name %s",champ.mem.prog_name);
 	j =0;
 	while (j < 4)
 	{
 		n = (unsigned int)champ.buf[i];
 		n = n & 0x000000ff;
 		champ.mem.prog_size = champ.mem.prog_size | n ;
-		printf("prod\n");
-		print_mem(champ.mem.prog_size);
+		//printf("prod\n");
+		//print_mem(champ.mem.prog_size);
 		i++;
 		j++;
 		if (j < 4)
 			champ.mem.prog_size = champ.mem.prog_size << 8;
 	}
-	printf("prog_size %d\n",champ.mem.prog_size);
+	//printf("prog_size %d\n",champ.mem.prog_size);
 	j =0;
 	if (champ.mem.prog_size > CHAMP_MAX_SIZE)
 	{
@@ -118,7 +118,7 @@ t_champ parse(t_champ champ)
 		i++;
 		j++;
 	}
-	printf("comment %s\n",champ.mem.comment);
+	//printf("comment %s\n",champ.mem.comment);
 	i = i+4;
 	j=0;
 	champ.code = malloc(champ.mem.prog_size + 1);
@@ -130,10 +130,10 @@ t_champ parse(t_champ champ)
 	}
 	champ.code[j] = '\0';
 	j = 0;
-	printf("code \n");
-	while(j < champ.mem.prog_size)
-		printf("%i ",champ.code[j++]);
-	printf("\n");
+	//printf("code \n");
+	//while(j < champ.mem.prog_size)
+	//	printf("%i ",champ.code[j++]);
+	//printf("\n");
 	/*while(i< HEAD_SIZE)
 	{
 		printf("%c-%d",champ.buf[i],i);
@@ -147,7 +147,8 @@ t_champ parse(t_champ champ)
 			printf("0");
 		champ.filech[2] = champ.filech[2] << 1;
 	}*/
-	printf("\n");
+	printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",champ.num, champ.mem.prog_size, champ.mem.prog_name,champ.mem.comment);
+
 	free(champ.buf);
 	return(champ);
 }
@@ -185,9 +186,9 @@ t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
 	buf = car;
 	while (car && (car->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
 	{
-		printf("champ->player->num %d\n", car->num);
+		//printf("champ->player->num %d\n", car->num);
 		if (!car->next)
-			printf("WINNNN %d\n",car->num);
+			printf("Contestant %d has won !\n",car->num);
 		car = time_to_die(car);
 		champ->num_ch = champ->num_ch - 1;
 	}
@@ -196,7 +197,7 @@ t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
 	{
 		while (car->next && (car->next->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
 		{
-			printf("champ->player->next->num %d\n", car->next->num);
+			//printf("champ->player->next->num %d\n", car->next->num);
 			car->next = time_to_die(car->next);
 			champ->num_ch = champ->num_ch - 1;
 		}
@@ -218,13 +219,13 @@ void game_start(t_core *champ)
 	t_car *buf;
 	int num_champ = champ->num_ch;
 	t_car *start = champ->player;
-	while (champ->player)
+	while (champ->player && cycle != champ->d_cycle)
 	{
 		if ((cycles_to_die <= 0) || (cycle == end_cycle))
 		{
 			champ->player = check_die(champ->player,cycle,cycles_to_die,champ);
 			start = champ->player;
-			printf("cycle_co die %d\n",cycles_to_die);
+			//printf("cycle_co die %d\n",cycles_to_die);
 			if (nbr_live >= NBR_LIVE || checks >= MAX_CHECKS)
 			{
 				cycles_to_die = cycles_to_die - CYCLE_DELTA;
@@ -250,7 +251,8 @@ void game_start(t_core *champ)
 			}
 			if(arena[champ->player->pc] == 15 || arena[champ->player->pc] == 12)
 				champ->num_ch = champ->num_ch + 1;
-			op_tab[arena[champ->player->pc] - 1].f(champ->player);
+			if (arena[champ->player->pc]  > 0 && arena[champ->player->pc]  < 17)
+				op_tab[arena[champ->player->pc] - 1].f(champ->player);
 		}
 		if (champ->player)
 		{
@@ -266,7 +268,9 @@ void game_start(t_core *champ)
 			i = 1;
 		}
 	}
-	printf("last %d",last);
+	if (champ->d_cycle == cycle)
+		print_arena(champ->dump);
+	//printf("last %d",last);
 }
 
 unsigned int change_arena(t_champ champ, int n,int num_ch)
@@ -320,14 +324,14 @@ void arena_set(t_core *champ)
 		//printf("i = %d|\n",i);
 		while(j > -1)
 		{
-			printf("champ->champions[j] %d  j %d\n",champ->champions[j].mem.prog_size,j);
+			//printf("champ->champions[j] %d  j %d\n",champ->champions[j].mem.prog_size,j);
 			if (i == champ->champions[j].num)
 			{
 				champ->player->num = champ->champions[j].num;
-				champ->player->pc = change_arena(champ->champions[j],i,champ->num_ch);
+				champ->player->pc = change_arena(champ->champions[j],champ->player->num,champ->num_ch);
 				champ->player->time = -1;
 				champ->player = init_reg(champ->player);
-				printf("num %d|\n",champ->player->num);
+				//printf("num %d|\n",champ->player->num);
 				champ->player = to_reg_from_int(champ->player, 1, - champ->player->num);
 				champ->player->next = malloc(sizeof(t_car));
 				champ->player = champ->player->next;
@@ -352,20 +356,47 @@ void arena_set(t_core *champ)
 			start = start->next;
 		}
 	}
-	print_arena();
+	//print_arena();
 }
-void print_arena()
+void print_arena(int num)
 {
 	int i =0;
 
 	unsigned int buf = 0;
+	printf("0x000%x : ",i);
 	while(i < MEM_SIZE)
 	{
 		buf = arena[i];
 		buf = buf & 0x000000ff;
-		printf("%x ",buf);
-		if (i % 50 ==0 && i!=0)
+		if (buf != 0)
+		{
+			if (buf < 16)
+				printf("0%x ",buf);
+			else
+				printf("%x ",buf);
+		}
+		else
+			printf("00 ");
+		if ((i + 1) % (num) ==0 && i!=0 && (i + 1) != MEM_SIZE)
+		{
+			i++;
 			printf("\n");
+			if (i < 0x10)
+				printf("0x000%x : ",i);
+			else
+			{
+				if (i < 0x100)
+					printf("0x00%x : ",i);
+				else
+				{
+					if (i < 0x1000)
+						printf("0x0%x : ",i);
+					else
+						printf("0x%x : ",i);
+				}
+			}
+			i--;
+		}
 		i++;
 	}
 	printf("\n");
@@ -374,7 +405,53 @@ void print_arena()
 int *parse_num(int *nums,char **argv,int n)
 {
 	int i =0;
-	while(i < n)
+	int j = 0;
+	int max;
+	int flag = 0;
+	while (i < 4)
+	{
+		nums[i++] = -1;
+	}
+	i=1;
+	while(i <= n)
+	{
+		if (ft_strstr(argv[i],".cor"))
+		{
+			j++;
+		}
+		if (ft_strequ(argv[i],"-n") == 1)
+		{
+			i++;
+			nums[j] = ft_atoi(argv[i]);
+		}
+		i++;
+	}
+	i = 1;
+	max = j;
+	j = 0;
+	while (i <= max)
+	{
+		while(j < max)
+		{
+			if (nums[j] == i)
+				flag = 1;
+			j++;
+		}
+		if (flag == 1)
+			i++;
+		else
+		{
+			j = 0;
+			while(nums[j] > 0 && j < max)
+				j++;
+			if (j < max)
+				nums[j] = i;
+			i++;
+		}
+		flag = 0;
+		j=0;
+	}
+	return(nums);
 }
 
 t_core *init_champ(int n,char **argv)
@@ -383,55 +460,47 @@ t_core *init_champ(int n,char **argv)
     int i;
     int num;
 
-    i = 0;
     champ = malloc(sizeof(t_core));
     //champ->champions = malloc(sizeof( t_champ) * 4);
 	champ->player = NULL;
-	i=0;
-	champ->num_ch = n;
+	i=1;
+	num = 0;
+	champ->d_cycle = -1;
 	//printf("N %d|\n",n);
 	int *nums;
 	nums = malloc(4 * sizeof(int));
-	nums = parse_num(nums,char **argv,n);
-    if (n <= MAX_PLAYERS)
-    {
-        i = 0;
-        num = 1;
-        while(i < n)
-        {
-            /*if (argv[i][0] == '-' &&  argv[i][1] == 'n')
-            {
-                i++;
-                num--;
-                champ->champions[num].num = atoi(argv[i]);//proverochka
-            }
-            else
-            {*/
-            //printf("%s\n",argv[num]);
-               // printf("%s %d\n",champ->champions[i].name,i);
-			   	if (ft_strstr(argv[i],".s"))
-				{
-					champ->champions[i].num = num;//proverka
-					champ->champions[i] = read_champ(argv[num],champ->champions[i]);
-					champ->champions[i] = parse(champ->champions[i]);
-				}
-           // }
-            i++;
-            num++;
-        }
-		//print_arena();
-    }
-    else
-    {
-        exit(0);
-    }
+	nums = parse_num(nums,argv,n);
+	while (i <= n)
+	{
+		if (ft_strequ(argv[i],"-dump"))
+		{
+			champ->dump = 64;
+			i++;
+			champ->d_cycle = ft_atoi(argv[i]);
+		}
+		if (ft_strequ(argv[i],"-d"))
+		{
+			champ->dump = 64;
+			i++;
+			champ->d_cycle = ft_atoi(argv[i]);
+		}
+		if (ft_strstr(argv[i],".cor"))
+		{
+			champ->champions[num].num = nums[num];//proverka
+			champ->champions[num] = read_champ(argv[i],champ->champions[num]);
+			champ->champions[num] = parse(champ->champions[num]);
+			num++;
+		}
+		i++;
+	}
+	champ->num_ch = num;
     return(champ);
 }
 
 int main(int arc,char **argv)
 {
     t_core *champ;
-	printf("head %d \n",HEAD_SIZE);
+	printf("Introducing contestants...\n");
     champ = init_champ(arc - 1,argv);
 	arena_set(champ);
 	game_start(champ);

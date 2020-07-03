@@ -35,14 +35,16 @@ typedef struct s_car
 	t_reg reg[REG_NUMBER + 1];
 	struct s_car	*next;
 
-}               t_car;
+}				t_car;
 
 typedef struct s_core
 {
-    int     num_ch;
+	int		num_ch;
 	t_car	*player;
-    t_champ champions[4];
-}               t_core;
+	t_champ champions[4];
+	int		dump;
+	int		d_cycle;
+}				t_core;
 
 typedef struct s_op
 {
@@ -57,12 +59,6 @@ typedef struct s_op
 	t_car *(*f)(t_car *car);
 }				t_op;
 
-typedef struct s_parse
-{
-	int dump;
-	int d;
-
-}				t_parse;
 
 t_car	*ft_live(t_car *car);
 t_car	*ft_ld(t_car *car);
