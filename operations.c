@@ -64,7 +64,7 @@ t_car *to_reg_from_int(t_car *car,int reg,int tr)
 	while(i < 4)
 	{
 		car->reg[reg].reg[REG_SIZE - i - 1] = tr & 0x000000ff;
-		//printf(" reg   |%d|\n",car->reg[reg].reg[REG_SIZE - i - 1]);
+	//	printf(" reg   |%d|\n",car->reg[reg].reg[REG_SIZE - i - 1]);
 		i++;
 		tr = tr >> 8;
 	}
@@ -97,7 +97,7 @@ void copy_to_arena(int start,int copy)
 	int i = 0;
 	while(i < 4)
 	{
-		//printf("do %d",arena[start + i]);
+		//printf("do %d|",arena[start + i]);
 		arena[start + 3 - i] = copy & 0x000000ff;
 		//printf("posle %d\n",arena[start + i]);
 		i++;
@@ -152,10 +152,14 @@ t_car	*ft_ld(t_car *car)
 		else
 		{
 			in1 = to_int_size(car->pc + 2, 2);
-			in1 = to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
+			if ((car->pc + in1 % IDX_MOD) % MEM_SIZE >= 0)
+				in1 = to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
+			else
+				in1 = to_int_size(MEM_SIZE - 1 + (car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
 			i = i + 2;
 		}
-		car = to_reg_from_int(car,arena[car->pc + i], in1);
+		if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
+			car = to_reg_from_int(car,arena[car->pc + i], in1);
 		if (in1 == 0)
 			car->carry = 1;
 		else
@@ -511,7 +515,10 @@ t_car	*ft_sti(t_car *car)
 			reg1 = to_int_from_reg(car,arena[car->pc + 2]);
 		//printf(" REG %i\n",reg1);
 		//printf(" arena %d\n",arena[car->pc + 2]);
-			copy_to_arena( car->pc +  (in1 + in2) % IDX_MOD, reg1);
+			if ((car->pc +  (in1 + in2) % IDX_MOD) % MEM_SIZE >= 0)
+				copy_to_arena( (car->pc +  (in1 + in2) % IDX_MOD) % MEM_SIZE, reg1);
+			else
+				copy_to_arena( MEM_SIZE -1 + (car->pc +  (in1 + in2) % IDX_MOD) % MEM_SIZE, reg1);
 		}
 	}
 	car->pc = (car->pc + 2 + arg[0] + arg[1] + arg[2]) % MEM_SIZE;

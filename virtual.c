@@ -14,7 +14,10 @@ t_champ read_champ(char *s, t_champ champ)
 	line[1] = '\0';
 	champ.buf = (char*)malloc(HEAD_SIZE + 1);
     if ((fd = open(s,O_RDONLY)) == -1)
-        exit(0);
+	{
+		perror("Error");
+        exit(-3);
+	}
 	
     off_t endfile = lseek(fd,0,SEEK_END);
     lseek(fd,0,0);
@@ -83,7 +86,13 @@ t_champ parse(t_champ champ)
 		if (i < 4)
 			champ.mem.magic = champ.mem.magic << 8;
 	}
-	//printf("magic %x\n",champ.mem.magic);
+	//printf("magic %u\n",champ.mem.magic);
+	if (champ.mem.magic != 15369203)
+	{
+		errno = EINVAL;
+		perror("Error");
+		exit(-2);
+	}
 	while (j < PROG_NAME_LENGTH)
 	{
 		champ.mem.prog_name[j] = champ.buf[i];
@@ -107,10 +116,14 @@ t_champ parse(t_champ champ)
 	}
 	//printf("prog_size %d\n",champ.mem.prog_size);
 	j =0;
-	if (champ.mem.prog_size > CHAMP_MAX_SIZE)
+	if (champ.mem.prog_size > CHAMP_MAX_SIZE || champ.mem.prog_size < 1)
 	{
-		printf("error\n");
-		exit(0);
+		if (champ.mem.prog_size < 1)
+			errno = ENOTSUP;
+		else
+			errno = EFBIG;
+		perror("Error");
+		exit(-1);
 	}
 	while (j < COMMENT_LENGTH)
 	{
@@ -147,7 +160,7 @@ t_champ parse(t_champ champ)
 			printf("0");
 		champ.filech[2] = champ.filech[2] << 1;
 	}*/
-	printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",champ.num, champ.mem.prog_size, champ.mem.prog_name,champ.mem.comment);
+	//printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",champ.num, champ.mem.prog_size, champ.mem.prog_name,champ.mem.comment);
 
 	free(champ.buf);
 	return(champ);
@@ -177,7 +190,19 @@ t_car *time_to_die(t_car *car)
 
 	new = car->next;
 	free(car);
+	car = NULL;
 	return(new);
+}
+
+void print_hello(t_core *champ)
+{
+	int i = 0;
+	printf("Introducing contestants...\n");
+	while (champ->champions[i].num !=0 && i < 4)
+	{
+		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",champ->champions[i].num, champ->champions[i].mem.prog_size, champ->champions[i].mem.prog_name,champ->champions[i].mem.comment);
+		i++;
+	}
 }
 
 t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
@@ -189,7 +214,9 @@ t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
 		//printf("champ->player->num %d\n", car->num);
 		if (!car->next)
 		{
+			print_hello(champ);
 			printf("Contestant %d has won !\n",car->num);
+			exit(0);
 		}
 		car = time_to_die(car);
 		champ->num_ch = champ->num_ch - 1;
@@ -221,11 +248,14 @@ void game_start(t_core *champ)
 	t_car *buf;
 	int num_champ = champ->num_ch;
 	t_car *start = champ->player;
+	//printf("Introducing contestants...\n");
 	while (champ->player && cycle != champ->d_cycle)
 	{
+		//if (cycle == 0)
+		//	printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",champ->champions[i-1].num, champ->champions[i-1].mem.prog_size, champ->champions[i-1].mem.prog_name,champ->champions[i-1].mem.comment);
 		if ((cycles_to_die <= 0) || (cycle == end_cycle))
 		{
-			champ->player = check_die(champ->player,cycle,cycles_to_die,champ);
+			champ->player = check_die(champ->player,cycle,cycles_to_die,champ);//нужно прописывать условия в операциях если коды будут не правильными!!!!
 			start = champ->player;
 			//printf("cycle_co die %d\n",cycles_to_die);
 			if (nbr_live >= NBR_LIVE || checks >= MAX_CHECKS)
@@ -242,7 +272,10 @@ void game_start(t_core *champ)
 		}
 		if (champ->player && champ->player->time < 0)
 		{
-			champ->player->time = op_tab[arena[champ->player->pc] - 1].time;
+			if (arena[champ->player->pc]  > 0 && arena[champ->player->pc]  < 17)
+				champ->player->time = op_tab[arena[champ->player->pc] - 1].time;
+			else
+				champ->player->time = 0;
 		}
 		if (champ->player && champ->player->time == 0)
 		{
@@ -255,6 +288,8 @@ void game_start(t_core *champ)
 				champ->num_ch = champ->num_ch + 1;
 			if (arena[champ->player->pc]  > 0 && arena[champ->player->pc]  < 17)
 				op_tab[arena[champ->player->pc] - 1].f(champ->player);
+			else
+				champ->player->pc = (champ->player->pc + 1) % MEM_SIZE;
 		}
 		if (champ->player)
 		{
@@ -262,16 +297,25 @@ void game_start(t_core *champ)
 			champ->player = champ->player->next;
 			i++;
 		}
-		if (!champ->player)
+		if (!champ->player)//|| num_champ == i)
 		{
 			num_champ = champ->num_ch;
 			champ->player = start;
+			if (!champ->player)
+			{
+				errno = EINTR;
+				perror("Error");
+				exit(-5);
+			}
 			cycle++;
 			i = 1;
 		}
 	}
 	if (champ->d_cycle == cycle)
+	{
+		print_hello(champ);
 		print_arena(champ->dump);
+	}
 	//printf("last %d",last);
 }
 
@@ -502,7 +546,7 @@ t_core *init_champ(int n,char **argv)
 int main(int arc,char **argv)
 {
     t_core *champ;
-	printf("Introducing contestants...\n");
+	//printf("Introducing contestants...\n");
     champ = init_champ(arc - 1,argv);
 	arena_set(champ);
 	game_start(champ);

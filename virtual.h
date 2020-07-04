@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "libft/libft.h"
 #include "op.h"
+#include <errno.h>
 
 #define HEAD_SIZE COMMENT_LENGTH+PROG_NAME_LENGTH+CHAMP_MAX_SIZE+10
 
