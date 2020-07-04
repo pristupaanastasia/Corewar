@@ -188,7 +188,9 @@ t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
 	{
 		//printf("champ->player->num %d\n", car->num);
 		if (!car->next)
+		{
 			printf("Contestant %d has won !\n",car->num);
+		}
 		car = time_to_die(car);
 		champ->num_ch = champ->num_ch - 1;
 	}

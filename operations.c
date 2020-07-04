@@ -127,7 +127,9 @@ int to_int_from_reg(t_car *car,int reg)
 t_car	*ft_live(t_car *car)
 {
 //	car->time = op_tab[0].time;
-	car->num = - to_int_size(car->pc + 1,4);
+	int k = - to_int_size(car->pc + 1,4);
+	if (k > 0)
+		car->num = k;
 	car->pc = (car->pc + 5) % MEM_SIZE;
 	return(car);
 }
@@ -190,7 +192,12 @@ t_car	*ft_st(t_car *car)
 			in2 = to_int_size(car->pc + 3, 2);
 			//in2 = arena[car->pc + in1 % IDX_MOD];
 			if (arena[car->pc + 2] > 0 && arena[car->pc + 2] <= REG_NUMBER)
-				copy_to_arena((car->pc + (in2 % IDX_MOD)) % MEM_SIZE ,in1);
+			{
+				if ((car->pc + (in2 % IDX_MOD)) % MEM_SIZE >=0)
+					copy_to_arena((car->pc + (in2 % IDX_MOD)) % MEM_SIZE ,in1);
+				else
+					copy_to_arena( MEM_SIZE - 1 + (car->pc + (in2 % IDX_MOD)) % MEM_SIZE ,in1);
+			}
 		}
 	}
 	car->pc = (car->pc + 2 + arg[0] + arg[1]) % MEM_SIZE;
@@ -598,15 +605,15 @@ t_car	*ft_aff(t_car *car)
 {
 	//if ()
 	int i;
+	int num;
+	char *s;
 
 	i = 0;
 	if (arena[car->pc + 2] <= REG_NUMBER && arena[car->pc + 2] > 0)
 	{
-		while(i < REG_SIZE)
-		{
-			write(1,&car->reg[arena[car->pc + 2]].reg[i],1);
-			i++;
-		}
+		num = to_int_from_reg(car,arena[car->pc + 2]);
+		s = ft_itoa(num);
+		write(1,s,ft_strlen(s));
 	}
 	car->pc = (car->pc + 3) % MEM_SIZE;
 	return(car);
