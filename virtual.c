@@ -270,13 +270,15 @@ void game_start(t_core *champ)
 			end_cycle = cycle + cycles_to_die;
 			nbr_live = 0;
 		}
-		if (champ->player && champ->player->time < 0)
+		if (champ->player && champ->player->time < 1)
 		{
 			if (arena[champ->player->pc]  > 0 && arena[champ->player->pc]  < 17)
 				champ->player->time = op_tab[arena[champ->player->pc] - 1].time;
 			else
 				champ->player->time = 0;
 		}
+		if (champ->player && champ->player->time > 0)
+			champ->player->time = champ->player->time - 1;
 		if (champ->player && champ->player->time == 0)
 		{
 			if (arena[champ->player->pc] == 1)
@@ -287,13 +289,15 @@ void game_start(t_core *champ)
 			if(arena[champ->player->pc] == 15 || arena[champ->player->pc] == 12)
 				champ->num_ch = champ->num_ch + 1;
 			if (arena[champ->player->pc]  > 0 && arena[champ->player->pc]  < 17)
+			{
+				//printf("fff %d",arena[champ->player->pc]);
 				op_tab[arena[champ->player->pc] - 1].f(champ->player);
+			}
 			else
 				champ->player->pc = (champ->player->pc + 1) % MEM_SIZE;
 		}
 		if (champ->player)
 		{
-			champ->player->time = champ->player->time - 1;
 			champ->player = champ->player->next;
 			i++;
 		}
