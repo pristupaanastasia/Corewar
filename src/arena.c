@@ -59,7 +59,7 @@ void print_addres(int i)
 		if (i < 0x100)
 			ft_printf("0x00%x : ",i);
 		else
-			(i < 0x1000) ? ft_printf("0x0%x : ",i) : ft_printf("0x%x : ",i);// sega in ldi_bug_in_zaz_corewar 
+			(i < 0x1000) ? ft_printf("0x0%x : ",i) : ft_printf("0x%x : ",i);// sega inldi_bug_in_zaz_corewar 
 	}
 }
 
