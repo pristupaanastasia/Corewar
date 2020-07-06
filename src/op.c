@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./header/op.h"
-#include "./header/virtual.h"
+#include "../header/op.h"
+#include "../header/virtual.h"
 
 t_op    op_tab[17] =
 {

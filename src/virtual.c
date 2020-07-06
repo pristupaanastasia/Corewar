@@ -1,4 +1,4 @@
-#include "./header/virtual.h"
+#include "../header/virtual.h"
 #include <stdio.h>
 
 char arena[MEM_SIZE];

@@ -1,5 +1,5 @@
 
-#include "./header/virtual.h"
+#include "../header/virtual.h"
 extern char arena[MEM_SIZE];
 int to_int(char a,char b)
 {

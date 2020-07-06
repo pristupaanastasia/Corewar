@@ -1,4 +1,4 @@
-#include "./header/virtual.h"
+#include "../header/virtual.h"
 extern char arena[MEM_SIZE];
 void	copy_to_arena(int start,int copy)
 {
