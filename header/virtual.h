@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../libft/libft.h"
+#include "../ft_printf/ft_printf.h"
 #include "op.h"
 #include <errno.h>
 
@@ -93,4 +94,18 @@ t_car	*ft_lldi(t_car *car);
 t_car	*ft_lfork(t_car *car);
 t_car	*ft_aff(t_car *car);
 t_car	*ft_fork(t_car *car);
+t_core	*init_champ(int n,char **argv);
+int		*parse_num(int *nums,char **argv,int n);
+void	game_start(t_core *champ);
+void	arena_set(t_core *champ);
+void	print_arena(int num);
+t_champ	parse(t_champ champ);
+t_champ read_champ(char *s, t_champ champ);
+void print_mem(unsigned int n);
+void print_char(char k);
+void print_hello(t_core *champ);
+t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ);
+t_car *time_to_die(t_car *car);
+t_car *init_reg(t_car *car);
+unsigned int change_arena(t_champ champ, int n,int num_ch);
 #endif
