@@ -11,7 +11,7 @@ t_car *time_to_die(t_car *car)
 
 	new = car->next;
 	free(car);
-	car = NULL;
+	//car = NULL;
 	return(new);
 }
 
@@ -19,14 +19,30 @@ t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
 {
 	t_car *buf;
 	buf = car;
+	int i;
+
+	i = 0;
 	while (car && (car->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
 	{
 		//printf("champ->player->num %d\n", car->num);
-		if (!car->next)
+		if (car && !car->next)
 		{
 			print_hello(champ);
 			ft_printf("Contestant %d has won !\n",car->num);
-			exit(0);
+			/*while(i < champ->num_ch)
+			{
+				free(champ->champions[i].code);
+				i++;
+			}
+			while(champ->player)
+			{
+				buf = champ->player;
+				champ->player = champ->player->next;
+				free(buf);
+			}
+			free(champ);*/
+			//exit(0);
+			//return(NULL);
 		}
 		car = time_to_die(car);
 		champ->num_ch = champ->num_ch - 1;
@@ -34,7 +50,7 @@ t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
 	buf = car;
 	while(car && car->next)
 	{
-		while (car->next && (car->next->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
+		while (car && car->next && (car->next->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
 		{
 			//printf("champ->player->next->num %d\n", car->next->num);
 			car->next = time_to_die(car->next);

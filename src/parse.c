@@ -75,6 +75,5 @@ t_champ parse(t_champ champ)
 	}
 	champ.code[j] = '\0';
 	j = 0;
-	free(champ.buf);
 	return(champ);
 }

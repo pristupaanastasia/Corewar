@@ -56,6 +56,7 @@ t_car	*ft_ldi(t_car *car)
 	if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
 		car = to_reg_from_int(car,arena[car->pc + i], in1);
 	car->pc = (car->pc + 2 + arg[0] + arg[1] + arg[2]) % MEM_SIZE;
+	free(arg);
 	return(car);
 }
 t_car	*ft_sti(t_car *car)
@@ -130,5 +131,6 @@ t_car	*ft_lld(t_car *car)
 	if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
 		car = to_reg_from_int(car,arena[car->pc + i], in1);
 	car->pc = (car->pc + 2 + arg[0] + arg[1]) % MEM_SIZE;
+	free(arg);
 	return(car);
 }

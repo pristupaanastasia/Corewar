@@ -71,6 +71,7 @@ t_car	*ft_aff(t_car *car)
 		num = to_int_from_reg(car,arena[car->pc + 2]);
 		s = ft_itoa(num);
 		write(1,s,ft_strlen(s));
+		free(s);
 	}
 	car->pc = (car->pc + 3) % MEM_SIZE;
 	return(car);

@@ -62,32 +62,29 @@ t_core *init_champ(int n,char **argv)
 	t_core *champ;
     int i;
     int num;
+	int *nums;
 
     champ = malloc(sizeof(t_core));
-    //champ->champions = malloc(sizeof( t_champ) * 4);
 	champ->player = NULL;
-	i=1;
+	i = 1;
 	num = 0;
 	champ->d_cycle = -1;
-	//printf("N %d|\n",n);
-	int *nums;
 	nums = malloc(4 * sizeof(int));
 	nums = parse_num(nums,argv,n);
+	champ->dump = 64;
 	while (i <= n)
 	{
 		if (ft_strequ(argv[i],"-dump"))
 		{
 			champ->dump = 64;
-			i++;
-			champ->d_cycle = ft_atoi(argv[i]);
+			champ->d_cycle = ft_atoi(argv[++i]);
 		}
 		if (ft_strequ(argv[i],"-d"))
 		{
 			champ->dump = 64;
-			i++;
-			champ->d_cycle = ft_atoi(argv[i]);
+			champ->d_cycle = ft_atoi(argv[++i]);
 		}
-		if (ft_strstr(argv[i],".cor"))
+		if (ft_strstr(argv[i], ".cor"))
 		{
 			champ->champions[num].num = nums[num];//proverka
 			champ->champions[num] = read_champ(argv[i],champ->champions[num]);
@@ -97,21 +94,37 @@ t_core *init_champ(int n,char **argv)
 		i++;
 	}
 	champ->num_ch = num;
+	free(nums);
+	if (num == 0)
+	{
+		errno = EINVAL;
+		perror("Error");
+		exit(-2);
+	}
     return(champ);
 }
 
 int main(int arc,char **argv)
 {
     t_core *champ;
+	t_car *buf;
+	int n;
 	//printf("Introducing contestants...\n");
     champ = init_champ(arc - 1,argv);
+	n = champ->num_ch;
 	arena_set(champ);
 	game_start(champ);
 	int i =0;
-	while(i < champ->num_ch)
+	while(i < n)
 	{
 		free(champ->champions[i].code);
 		i++;
+	}
+	while(champ->player)
+	{
+		buf = champ->player;
+		champ->player = champ->player->next;
+		free(buf);
 	}
 	free(champ);
    // printf("%d \n",arc);

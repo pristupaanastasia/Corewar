@@ -4,7 +4,7 @@
 char arena[MEM_SIZE];
 extern t_op    op_tab[17];
 
-t_car *init_champions(t_car *player,int j,t_core *champ)
+t_car *init_champions(t_car *player, int j, t_core *champ)
 {
 	player->num = champ->champions[j].num;
 	player->pc = change_arena(champ->champions[j],player->num,champ->num_ch);
@@ -17,11 +17,15 @@ t_car *init_champions(t_car *player,int j,t_core *champ)
 
 void arena_set(t_core *champ)
 {
-	int i =champ->num_ch;
-	int j =champ->num_ch - 1;
-	int car = 0;
-	champ->player = malloc(sizeof(t_car));
+	int j;
+	int i;
+	int car;
 	t_car *start;
+
+	i =champ->num_ch;
+	j =champ->num_ch - 1;
+	car = 0;
+	champ->player = malloc(sizeof(t_car));
 	start = champ->player;
 	while(i >0)
 	{
@@ -43,8 +47,11 @@ void arena_set(t_core *champ)
 	champ->player = start;
 	while (start)
 	{
-		if (start->next->num == -1)
+		if (start->next && start->next->num == -1)
+		{
+			free(start->next);
 			start->next = NULL;
+		}
 		start = start->next;
 	}
 }
@@ -59,7 +66,7 @@ void print_addres(int i)
 		if (i < 0x100)
 			ft_printf("0x00%x : ",i);
 		else
-			(i < 0x1000) ? ft_printf("0x0%x : ",i) : ft_printf("0x%x : ",i);// sega inldi_bug_in_zaz_corewar 
+			(i < 0x1000) ? ft_printf("0x0%x : ",i) : ft_printf("0x%x : ",i);
 	}
 }
 

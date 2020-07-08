@@ -34,6 +34,7 @@ t_car	*ft_st(t_car *car)
 		}
 	}
 	car->pc = (car->pc + 2 + arg[0] + arg[1]) % MEM_SIZE;
+	free(arg);
 	return(car);
 }
 

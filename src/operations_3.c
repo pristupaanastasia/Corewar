@@ -44,9 +44,8 @@ t_car	*ft_live(t_car *car)
 
 t_car	*ft_ld(t_car *car)
 {
-	//if ()
 	int *arg;
-	int in1;
+	int in1 = 0;
 	int i = 2;
 	arg = malloc(sizeof(int) * 3);
 	arg = read_arg(arg,arena[car->pc + 1],4);

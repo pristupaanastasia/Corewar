@@ -16,7 +16,7 @@
 
 typedef struct	s_champ
 {
-	char			*buf;
+	char			buf[HEAD_SIZE +1];
 	head_t			mem;
 	char			*code;
 	int				num;

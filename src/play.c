@@ -73,13 +73,8 @@ void game_start(t_core *champ)
 		if (!champ->player)//|| num_champ == i)
 		{
 			num_champ = champ->num_ch;
-			champ->player = start;
-			if (!champ->player)
-			{
-				errno = EINTR;
-				perror("Error");
-				exit(-5);
-			}
+			if (start)
+				champ->player = start;
 			cycle++;
 			i = 1;
 		}

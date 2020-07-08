@@ -62,8 +62,8 @@ t_car	*ft_or(t_car *car)
 	int i = 2;
 	arg = malloc(sizeof(int) * 3);
 	arg = read_arg(arg,arena[car->pc + 1],4);
-	int in1;
-	int in2;
+	int in1 = 0;
+	int in2 = 0;
 	if ((arena[car->pc + 1] & 0xc0) == 0x40)
 	{
 		if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)

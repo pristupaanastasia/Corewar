@@ -1,6 +1,7 @@
 
 #include "../header/virtual.h"
 extern char arena[MEM_SIZE];
+
 int to_int(char a,char b)
 {
 	int sum;
@@ -15,14 +16,16 @@ int to_int(char a,char b)
 	return(sum);
 }
 
-t_car *copy_car(t_car *copy,t_car *car)
+t_car *copy_car(t_car *copy, t_car *car)
 {
-	int i = 0;
-	int j = 0;
+	int i;
+	int j;
 	copy->num = car->num;
 	copy->carry = car->carry;
 	copy->cycle_live = car->cycle_live;
 	copy->time = -1;
+	i = 0;
+	j = 0;
 	while(i < REG_NUMBER)
 	{
 		while(j < REG_SIZE)
@@ -61,9 +64,10 @@ int *read_arg(int *arg,char mem,int size_dir)
 
 t_car *to_reg_from_int(t_car *car,int reg,int tr)
 {
-	int i = 0;
+	int i;
 	//printf(" TR %d\n",tr);
 	//printf(" REG %d\n",reg);
+	i = 0;
 	while(i < 4)
 	{
 		car->reg[reg].reg[REG_SIZE - i - 1] = tr & 0x000000ff;
@@ -76,9 +80,13 @@ t_car *to_reg_from_int(t_car *car,int reg,int tr)
 
 int to_int_size(int start, int size)
 {
-	int i = 0;
-	int solve = 0;
-	int n = 0;
+	int i;
+	int solve;
+	int n;
+
+	i = 0;
+	solve = 0;
+	n = 0;
 	while(i < size)
 	{
 		//printf(" ARENA %d ",arena[start + i]);
