@@ -69,6 +69,7 @@ unsigned int change_arena(t_champ champ, int n,int num_ch)
 	unsigned int i=0;
 	while(i < champ.mem.prog_size)
 	{
+	//	printf(" |%x|",champ.code[i]);
 		arena[start + i] = champ.code[i];
 		i++;
 	}

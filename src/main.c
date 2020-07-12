@@ -87,8 +87,9 @@ t_core *init_champ(int n,char **argv)
 		if (ft_strstr(argv[i], ".cor"))
 		{
 			champ->champions[num].num = nums[num];//proverka
-			champ->champions[num] = read_champ(argv[i],champ->champions[num]);
-			champ->champions[num] = parse(champ->champions[num]);
+			champ = read_champ(argv[i],champ,num);
+			//printf("\n NUM == %d \n",num);
+			champ = parse(champ,num);
 			num++;
 		}
 		i++;

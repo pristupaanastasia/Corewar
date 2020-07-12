@@ -4,7 +4,7 @@
 char		arena[MEM_SIZE];
 extern t_op	op_tab[17];
 
-t_champ read_champ(char *s, t_champ champ)
+t_core *read_champ(char *s, t_core *core, int num)
 {
 	char *line;
 	int fd;
@@ -14,7 +14,9 @@ t_champ read_champ(char *s, t_champ champ)
 	line = malloc(2);
 	line[1] = '\0';
 	j = 0;
-	//champ.buf = (char)malloc(HEAD_SIZE + 1);
+	core->champions[num].buf = malloc(HEAD_SIZE + 1);
+	if (!core->champions[num].buf)
+		exit(-3);
 	if ((fd = open(s,O_RDONLY)) == -1)
 	{
 		perror("Error");
@@ -26,12 +28,13 @@ t_champ read_champ(char *s, t_champ champ)
 	{
 		if((k = read(fd, line, 1)) == -1)
 			exit(0);
-		champ.buf[j] = line[0];
+		core->champions[num].buf[j] = line[0];
+		//printf(" |%x|",core->champions[num].buf[j]);
 		j++;
 	}
-	champ.buf[j]='\0';
+	core->champions[num].buf[j]='\0';
 	free(line);
-	return(champ);
+	return(core);
 }
 
 void print_mem(unsigned int n)

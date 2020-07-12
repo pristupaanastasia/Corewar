@@ -50,7 +50,7 @@ t_car	*ft_lfork(t_car *car)
 	copy = copy_car(copy,car);
 	copy->pc = (car->pc + in1) % MEM_SIZE;
 	car->pc = (car->pc + 3) % MEM_SIZE;
-	while(car->next)
+	while(car && car->next)
 	{
 		car = car->next;
 	}

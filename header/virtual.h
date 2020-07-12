@@ -16,7 +16,7 @@
 
 typedef struct	s_champ
 {
-	char			buf[HEAD_SIZE +1];
+	char			*buf;
 	head_t			mem;
 	char			*code;
 	int				num;
@@ -99,8 +99,8 @@ int		*parse_num(int *nums,char **argv,int n);
 void	game_start(t_core *champ);
 void	arena_set(t_core *champ);
 void	print_arena(int num);
-t_champ	parse(t_champ champ);
-t_champ read_champ(char *s, t_champ champ);
+t_core *parse(t_core *champ, int num);
+t_core *read_champ(char *s, t_core *core, int num);
 void print_mem(unsigned int n);
 void print_char(char k);
 void print_hello(t_core *champ);

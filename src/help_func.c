@@ -36,6 +36,7 @@ t_car *copy_car(t_car *copy, t_car *car)
 		j = 0;
 		i++;
 	}
+	copy->next = NULL;
 	return(copy);
 }
 
