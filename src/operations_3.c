@@ -60,7 +60,7 @@ t_car	*ft_ld(t_car *car)
 		{
 			in1 = to_int(arena[car->pc + 2],arena[car->pc + 3]);
 			in1 = (car->pc + in1 % IDX_MOD) % MEM_SIZE >= 0 ? to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE,
-			4) : to_int_size(MEM_SIZE - 1 + (car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
+			4) : to_int_size(MEM_SIZE  + (car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
 			i = i + 2;
 		}
 		if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)

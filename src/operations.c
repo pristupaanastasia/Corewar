@@ -12,9 +12,10 @@ t_car	*ft_zjmp(t_car *car)
 	if (indir != 0 && car->carry == 1)
 	{
 		//printf("car %d PRIG\n",car->num);
-		car->pc = (car->pc + (indir  % IDX_MOD)) % MEM_SIZE;
-		if (car->pc < 0)
-			car->pc = MEM_SIZE + car->pc;
+		if ((car->pc + (indir  % IDX_MOD)) % MEM_SIZE >= 0)
+			car->pc = (car->pc + (indir  % IDX_MOD)) % MEM_SIZE;
+		else
+			car->pc = MEM_SIZE  + (car->pc + (indir  % IDX_MOD)) % MEM_SIZE;
 	}
 	else
 	{
@@ -35,7 +36,10 @@ t_car	*ft_ldi(t_car *car)
 	if ((arena[car->pc + 1] & 0xc0) == 0xc0)
 	{
 		in1 = to_int(arena[car->pc + i],arena[car->pc + i + 1]);
-		in1 = to_int_size(car->pc + in1 % IDX_MOD,4);
+		if (((car->pc + in1 % IDX_MOD) % MEM_SIZE) >= 0)
+			in1 = to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
+		else
+			in1 = to_int_size( MEM_SIZE -1 +(car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
 		i = i + 2;
 	}
 	if ((arena[car->pc + 1] & 0xc0) == 0x80)
@@ -52,7 +56,10 @@ t_car	*ft_ldi(t_car *car)
 		if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
 			in2 = to_int_from_reg(car,arena[car->pc + i++]);
 	}
-	in1 = to_int_size(car->pc + (in1 + in2) % IDX_MOD,4);
+	if ((car->pc + (in1 + in2) % IDX_MOD) >= 0)
+		in1 = to_int_size((car->pc + (in1 + in2) % IDX_MOD) % MEM_SIZE,4);
+	else
+		in1 = to_int_size(MEM_SIZE -1 + (car->pc + (in1 + in2) % IDX_MOD) % MEM_SIZE,4);
 	if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
 		car = to_reg_from_int(car,arena[car->pc + i], in1);
 	car->pc = (car->pc + 2 + arg[0] + arg[1] + arg[2]) % MEM_SIZE;
@@ -80,7 +87,10 @@ t_car	*ft_sti(t_car *car)
 		if ((arena[car->pc + 1] & 0x30) == 0x30)
 		{
 			in1 = to_int(arena[car->pc + i],arena[car->pc + i + 1]);
-			in1 = to_int_size(car->pc + in1 % IDX_MOD,4);
+			if ((car->pc + in1 % IDX_MOD) % MEM_SIZE >= 0)
+				in1 = to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
+			else
+				in1 = to_int_size(MEM_SIZE  +(car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
 			i = i + 2;
 		}
 		if ((arena[car->pc + 1] & 0x0c) == 0x08)
@@ -99,7 +109,7 @@ t_car	*ft_sti(t_car *car)
 			if ((car->pc +  (in1 + in2) % IDX_MOD) % MEM_SIZE >= 0)
 				copy_to_arena( (car->pc +  (in1 + in2) % IDX_MOD) % MEM_SIZE, reg1);
 			else
-				copy_to_arena( MEM_SIZE -1 + (car->pc +  (in1 + in2) % IDX_MOD) % MEM_SIZE, reg1);
+				copy_to_arena( MEM_SIZE  + (car->pc +  (in1 + in2) % IDX_MOD) % MEM_SIZE, reg1);
 		}
 	}
 	car->pc = (car->pc + 2 + arg[0] + arg[1] + arg[2]) % MEM_SIZE;
@@ -126,7 +136,10 @@ t_car	*ft_lld(t_car *car)
 	{
 		in1 = to_int(arena[car->pc + i],arena[car->pc + i + 1]);
 		i = i + 2;
-		in1 = to_int_size(car->pc + in1,4);
+		if ((car->pc + in1) % MEM_SIZE >= 0)
+			in1 = to_int_size((car->pc + in1) % MEM_SIZE,4);
+		else
+			in1 = to_int_size(MEM_SIZE -1 + (car->pc + in1) % MEM_SIZE,4);
 	}
 	if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
 		car = to_reg_from_int(car,arena[car->pc + i], in1);

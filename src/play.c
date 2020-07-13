@@ -57,7 +57,8 @@ void game_start(t_core *champ)
 			end_cycle = cycle + cycles_to_die;
 			nbr_live = 0;
 		}
-		champ->player = time_oper(champ->player);
+		if (champ->player)
+			champ->player = time_oper(champ->player);
 		if (champ->player && champ->player->time == 0)
 		{
 			champ->player = parse_func_champ(champ->player,champ,cycle);

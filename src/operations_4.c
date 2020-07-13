@@ -29,7 +29,7 @@ t_car	*ft_st(t_car *car)
 				if ((car->pc + (in2 % IDX_MOD)) % MEM_SIZE >=0)
 					copy_to_arena((car->pc + (in2 % IDX_MOD)) % MEM_SIZE ,in1);
 				else
-					copy_to_arena( MEM_SIZE - 1 + (car->pc + (in2 % IDX_MOD)) % MEM_SIZE ,in1);
+					copy_to_arena( MEM_SIZE  + (car->pc + (in2 % IDX_MOD)) % MEM_SIZE ,in1);
 			}
 		}
 	}

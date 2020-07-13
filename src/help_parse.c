@@ -14,7 +14,7 @@ t_core *read_champ(char *s, t_core *core, int num)
 	line = malloc(2);
 	line[1] = '\0';
 	j = 0;
-	core->champions[num].buf = malloc(HEAD_SIZE + 1);
+	core->champions[num].buf = malloc(MEM_SIZE);
 	if (!core->champions[num].buf)
 		exit(-3);
 	if ((fd = open(s,O_RDONLY)) == -1)

@@ -13,7 +13,10 @@ t_car	*ft_lldi(t_car *car)
 	if ((arena[car->pc + 1] & 0xc0) == 0xc0)
 	{
 		in1 = to_int(arena[car->pc + i],arena[car->pc + i + 1]);
-		in1 = to_int_size(car->pc + in1 % IDX_MOD,4);
+		if ((car->pc + in1 % IDX_MOD) % MEM_SIZE >= 0)
+			in1 = to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
+		else
+			in1 = to_int_size(MEM_SIZE -1 + (car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
 		i = i + 2;
 	}
 	if ((arena[car->pc + 1] & 0xc0) == 0x80)
@@ -30,7 +33,10 @@ t_car	*ft_lldi(t_car *car)
 		if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
 			in2 = to_int_from_reg(car,arena[car->pc + i++]);
 	}
-	in1 = to_int_size(car->pc + (in1 + in2),4);
+	if ((car->pc + (in1 + in2)) % MEM_SIZE >= 0)
+		in1 = to_int_size((car->pc + (in1 + in2)) % MEM_SIZE,4);
+	else
+		in1 = to_int_size(MEM_SIZE -1 + (car->pc + (in1 + in2)) % MEM_SIZE,4);
 	if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
 		car = to_reg_from_int(car,arena[car->pc + i], in1);
 	car->pc = (car->pc + 2 + arg[0] + arg[1]) % MEM_SIZE;
@@ -48,7 +54,10 @@ t_car	*ft_lfork(t_car *car)
 	int in1;
 	in1 = to_int(arena[car->pc + 1],arena[car->pc + 2]);
 	copy = copy_car(copy,car);
-	copy->pc = (car->pc + in1) % MEM_SIZE;
+	if ((car->pc + in1) % MEM_SIZE >= 0)
+		copy->pc = (car->pc + in1) % MEM_SIZE;
+	else
+		copy->pc = MEM_SIZE -1 + (car->pc + in1) % MEM_SIZE;
 	car->pc = (car->pc + 3) % MEM_SIZE;
 	while(car && car->next)
 	{
@@ -89,7 +98,10 @@ t_car	*ft_fork(t_car *car)
 	int in1;
 	in1 = to_int(arena[car->pc + 1],arena[car->pc + 2]);
 	copy = copy_car(copy,car);
-	copy->pc = (car->pc + in1 % IDX_MOD) % MEM_SIZE;
+	if ((car->pc + in1 % IDX_MOD) % MEM_SIZE >= 0)
+		copy->pc = (car->pc + in1 % IDX_MOD) % MEM_SIZE;
+	else
+		copy->pc = MEM_SIZE -1 + (car->pc + in1 % IDX_MOD) % MEM_SIZE;
 	car->pc = (car->pc + 3) % MEM_SIZE;
 	while(car->next)
 	{

@@ -9,6 +9,8 @@ t_car *init_champions(t_car *player, int j, t_core *champ)
 	player->num = champ->champions[j].num;
 	player->pc = change_arena(champ->champions[j],player->num,champ->num_ch);
 	player->time = -1;
+	player->cycle_live = -1;
+	player->carry = 0;
 	player = init_reg(player);
 	player = to_reg_from_int(player, 1, - player->num);
 	player->next = malloc(sizeof(t_car));
