@@ -108,4 +108,5 @@ t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ);
 t_car *time_to_die(t_car *car);
 t_car *init_reg(t_car *car);
 unsigned int change_arena(t_champ champ, int n,int num_ch);
+void ft_error(int ex,int code);
 #endif

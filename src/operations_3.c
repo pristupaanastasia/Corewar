@@ -1,12 +1,12 @@
 #include "../header/virtual.h"
-extern char arena[MEM_SIZE];
+extern char	g_arena[MEM_SIZE];
 void	copy_to_arena(int start,int copy)
 {
 	int i = 0;
 	while(i < 4)
 	{
 		//printf("do %d| ",arena[start + 3 - i]);
-		arena[start + 3 - i] = (char)(copy & 0x000000ff);
+		g_arena[start + 3 - i] = (char)(copy & 0x000000ff);
 		//printf("posle %d ",arena[start + 3 - i]);
 		i++;
 		copy = copy >> 8;
@@ -48,7 +48,7 @@ t_car	*ft_ld(t_car *car)
 	int in1 = 0;
 	int i = 2;
 	arg = malloc(sizeof(int) * 3);
-	arg = read_arg(arg,arena[car->pc + 1],4);
+	arg = read_arg(arg, g_arena[car->pc + 1],4);
 	if ((arg[0] == 4 || arg[0] == 2) && arg[1] == 1)
 	{
 		if (arg[0] == 4)
@@ -58,13 +58,13 @@ t_car	*ft_ld(t_car *car)
 		}
 		else
 		{
-			in1 = to_int(arena[car->pc + 2],arena[car->pc + 3]);
+			in1 = to_int(g_arena[car->pc + 2],g_arena[car->pc + 3]);
 			in1 = (car->pc + in1 % IDX_MOD) % MEM_SIZE >= 0 ? to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE,
 			4) : to_int_size(MEM_SIZE  + (car->pc + in1 % IDX_MOD) % MEM_SIZE,4);
 			i = i + 2;
 		}
-		if (arena[car->pc + i] > 0 && arena[car->pc + i] <= REG_NUMBER)
-			car = to_reg_from_int(car,arena[car->pc + i], in1);
+		if (g_arena[car->pc + i] > 0 && g_arena[car->pc + i] <= REG_NUMBER)
+			car = to_reg_from_int(car,g_arena[car->pc + i], in1);
 		car->carry = in1 == 0 ? 1 : 0;
 	}
 	car->pc = (car->pc + 2 + arg[0] + arg[1]) % MEM_SIZE;

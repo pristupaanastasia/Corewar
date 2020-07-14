@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   help_func.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/14 20:02:30 by mriley            #+#    #+#             */
+/*   Updated: 2020/07/14 20:04:08 by mriley           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../header/virtual.h"
-extern char arena[MEM_SIZE];
 
-int to_int(char a,char b)
+extern char g_arena[MEM_SIZE];
+
+int		to_int(char a, char b)
 {
-	int sum;
+	int		sum;
 
 	sum = 0;
 	sum = a;
@@ -13,22 +25,23 @@ int to_int(char a,char b)
 	sum = sum | (b & 0x000000ff);
 	if (sum > 0x00007fff)
 		sum = sum | 0xfffff000;
-	return(sum);
+	return (sum);
 }
 
-t_car *copy_car(t_car *copy, t_car *car)
+t_car	*copy_car(t_car *copy, t_car *car)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
+
 	copy->num = car->num;
 	copy->carry = car->carry;
 	copy->cycle_live = car->cycle_live;
 	copy->time = -1;
 	i = 0;
 	j = 0;
-	while(i < REG_NUMBER)
+	while (i < REG_NUMBER)
 	{
-		while(j < REG_SIZE)
+		while (j < REG_SIZE)
 		{
 			copy->reg[i].reg[j] = car->reg[i].reg[j];
 			j++;
@@ -37,10 +50,10 @@ t_car *copy_car(t_car *copy, t_car *car)
 		i++;
 	}
 	copy->next = NULL;
-	return(copy);
+	return (copy);
 }
 
-int *read_arg(int *arg,char mem,int size_dir)
+int		*read_arg(int *arg, char mem, int size_dir)
 {
 	if ((mem & 0xc0) == 0x80)
 		arg[0] = size_dir;
@@ -60,46 +73,40 @@ int *read_arg(int *arg,char mem,int size_dir)
 		arg[2] = T_REG;
 	if ((mem & 0x0c) == 0x0c)
 		arg[2] = IND_SIZE;
-	return(arg);
+	return (arg);
 }
 
-t_car *to_reg_from_int(t_car *car,int reg,int tr)
+t_car	*to_reg_from_int(t_car *car, int reg, int tr)
 {
-	int i;
-	//printf(" TR %d\n",tr);
-	//printf(" REG %d\n",reg);
+	int		i;
+
 	i = 0;
-	while(i < 4)
+	while (i < 4)
 	{
 		car->reg[reg].reg[REG_SIZE - i - 1] = tr & 0x000000ff;
-		//printf(" reg   |%d|\n",car->reg[reg].reg[REG_SIZE - i - 1]);
 		i++;
 		tr = tr >> 8;
 	}
-	return(car);
+	return (car);
 }
 
-int to_int_size(int start, int size)
+int		to_int_size(int start, int size)
 {
-	int i;
-	int solve;
-	int n;
+	int		i;
+	int		solve;
+	int		n;
 
 	i = 0;
 	solve = 0;
 	n = 0;
-	while(i < size)
+	while (i < size)
 	{
-		//printf(" ARENA %d ",arena[start + i]);
-		n = (int)arena[start + i];
+		n = (int)g_arena[start + i];
 		n = n & 0x000000ff;
-		//printf(" N %i ", n);
 		solve = solve | n;
-		//printf(" solve %i", n);
 		i++;
-		if( i < size)
+		if (i < size)
 			solve = solve << 8;
 	}
-	//printf("\n");
-	return(solve);
+	return (solve);
 }

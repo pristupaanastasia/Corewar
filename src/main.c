@@ -1,32 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/14 20:08:38 by mriley            #+#    #+#             */
+/*   Updated: 2020/07/14 20:14:47 by mriley           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char arena[MEM_SIZE];
-extern t_op    op_tab[17];
+char	g_arena[MEM_SIZE];
+extern t_op    g_op_tab[17];
 
 
-int *parse_num(int *nums,char **argv,int n)
+int		*parse_num(int *nums,char **argv,int n)
 {
-	int i =0;
-	int j = 0;
+	int i;
+	int j;
 	int max;
-	int flag = 0;
+	int flag;
+
+	i =0;
+	j = 0;
+	flag = 0;
 	while (i < 4)
-	{
 		nums[i++] = -1;
-	}
-	i=1;
+	i = 1;
 	while(i <= n)
 	{
 		if (ft_strstr(argv[i],".cor"))
-		{
 			j++;
-		}
 		if (ft_strequ(argv[i],"-n") == 1)
-		{
-			i++;
-			nums[j] = ft_atoi(argv[i]);
-		}
+			nums[j] = ft_atoi(argv[++i]);
 		i++;
 	}
 	i = 1;
@@ -35,11 +44,8 @@ int *parse_num(int *nums,char **argv,int n)
 	while (i <= max)
 	{
 		while(j < max)
-		{
-			if (nums[j] == i)
+			if (nums[j++] == i)
 				flag = 1;
-			j++;
-		}
 		if (flag == 1)
 			i++;
 		else
@@ -54,17 +60,17 @@ int *parse_num(int *nums,char **argv,int n)
 		flag = 0;
 		j=0;
 	}
-	return(nums);
+	return (nums);
 }
 
-t_core *init_champ(int n,char **argv)
+t_core	*init_champ(int n,char **argv)
 {
-	t_core *champ;
-    int i;
-    int num;
-	int *nums;
+	t_core	*champ;
+	int		i;
+	int		num;
+	int		*nums;
 
-    champ = malloc(sizeof(t_core));
+	champ = malloc(sizeof(t_core));
 	champ->player = NULL;
 	i = 1;
 	num = 0;
@@ -74,42 +80,28 @@ t_core *init_champ(int n,char **argv)
 	champ->dump = 64;
 	while (i <= n)
 	{
-		if (ft_strequ(argv[i],"-dump"))
-		{
-			champ->dump = 64;
+		if (ft_strequ(argv[i], "-dump") || ft_strequ(argv[i], "-d"))
 			champ->d_cycle = ft_atoi(argv[++i]);
-		}
-		if (ft_strequ(argv[i],"-d"))
-		{
-			champ->dump = 64;
-			champ->d_cycle = ft_atoi(argv[++i]);
-		}
 		if (ft_strstr(argv[i], ".cor"))
 		{
-			champ->champions[num].num = nums[num];//proverka
+			champ->champions[num].num = nums[num];
 			champ = read_champ(argv[i],champ,num);
-			//printf("\n NUM == %d \n",num);
-			champ = parse(champ,num);
-			num++;
+			champ = parse(champ,num++);
 		}
 		i++;
 	}
 	champ->num_ch = num;
 	free(nums);
 	if (num == 0)
-	{
-		errno = EINVAL;
-		perror("Error");
-		exit(-2);
-	}
-    return(champ);
+		ft_error(EINVAL, -2);
+	return (champ);
 }
 
-int main(int arc,char **argv)
+int		main(int arc, char **argv)
 {
-    t_core *champ;
-	t_car *buf;
-	int n;
+	t_core	*champ;
+	t_car	*buf;
+	int		n;
 	//printf("Introducing contestants...\n");
     champ = init_champ(arc - 1,argv);
 	n = champ->num_ch;
