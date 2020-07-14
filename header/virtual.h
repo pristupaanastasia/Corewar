@@ -13,7 +13,7 @@
 #include <errno.h>
 
 #define HEAD_SIZE COMMENT_LENGTH+PROG_NAME_LENGTH+CHAMP_MAX_SIZE+10
-
+#define DUMP 64
 typedef struct	s_champ
 {
 	char			*buf;
@@ -95,7 +95,7 @@ t_car	*ft_lfork(t_car *car);
 t_car	*ft_aff(t_car *car);
 t_car	*ft_fork(t_car *car);
 t_core	*init_champ(int n,char **argv);
-int		*parse_num(int *nums,char **argv,int n);
+int		*parse_num(char **argv,int n);
 void	game_start(t_core *champ);
 void	arena_set(t_core *champ);
 void	print_arena(int num);
