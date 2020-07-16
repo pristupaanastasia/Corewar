@@ -1,35 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   play.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/16 19:19:12 by mriley            #+#    #+#             */
+/*   Updated: 2020/07/16 19:24:24 by mriley           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char g_arena[MEM_SIZE];
-extern t_op    g_op_tab[17];
+char			g_arena[MEM_SIZE];
+extern t_op		g_op_tab[17];
 
-t_car *parse_func_champ(t_car *champ, t_core *core, int cycle)
+t_car	*parse_func_champ(t_car *champ, t_core *core, int cycle)
 {
 	if (g_arena[champ->pc] == 1)
-	{
 		champ->cycle_live = cycle;
-		//nbr_live++;
-	}
 	if(g_arena[champ->pc] == 15 || g_arena[champ->pc] == 12)
 		core->num_ch = core->num_ch + 1;
 	if (g_arena[champ->pc]  > 0 && g_arena[champ->pc]  < 17)
 		g_op_tab[g_arena[champ->pc] - 1].f(champ);
 	else
 		champ->pc = (champ->pc + 1) % MEM_SIZE;
-	return(champ);
+	return (champ);
 }
 
-t_car *time_oper(t_car *champ)
+t_car	*time_oper(t_car *champ)
 {
 	if (champ && champ->time < 1)
 		champ->time = g_arena[champ->pc]  > 0 && g_arena[champ->pc]  < 17 ? g_op_tab[g_arena[champ->pc] - 1].time : 0;
 	if (champ && champ->time > 0)
 		champ->time = champ->time - 1;
-	return(champ);
+	return (champ);
 }
 
-void game_start(t_core *champ)
+void	game_start(t_core *champ)
 {
 	int cycle =0;
 	unsigned int i =1;
@@ -45,7 +54,7 @@ void game_start(t_core *champ)
 	{
 		if ((cycles_to_die <= 0) || (cycle == end_cycle))
 		{
-			champ->player = check_die(champ->player,cycle,cycles_to_die,champ);//нужно прописывать условия в операциях если коды будут не правильными!!!!
+			champ->player = check_die(champ->player,cycle,cycles_to_die,champ);
 			start = champ->player;
 			if (nbr_live >= NBR_LIVE || checks >= MAX_CHECKS)
 			{
@@ -73,8 +82,7 @@ void game_start(t_core *champ)
 		if (!champ->player || i == num_champ + 1)
 		{
 			num_champ = champ->num_ch;
-			if (start)
-				champ->player = start;
+			champ->player = start;
 			cycle++;
 			i = 1;
 		}
@@ -84,5 +92,4 @@ void game_start(t_core *champ)
 		print_hello(champ);
 		print_arena(champ->dump);
 	}
-	//printf("last %d",last);
 }
