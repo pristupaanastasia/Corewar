@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 19:19:12 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/16 19:24:24 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/18 16:46:09 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ t_car	*parse_func_champ(t_car *champ, t_core *core, int cycle)
 {
 	if (g_arena[champ->pc] == 1)
 		champ->cycle_live = cycle;
-	if(g_arena[champ->pc] == 15 || g_arena[champ->pc] == 12)
+	if (g_arena[champ->pc] == 15 || g_arena[champ->pc] == 12)
 		core->num_ch = core->num_ch + 1;
-	if (g_arena[champ->pc]  > 0 && g_arena[champ->pc]  < 17)
+	if (g_arena[champ->pc] > 0 && g_arena[champ->pc] < 17)
 		g_op_tab[g_arena[champ->pc] - 1].f(champ);
 	else
 		champ->pc = (champ->pc + 1) % MEM_SIZE;
@@ -32,64 +32,87 @@ t_car	*parse_func_champ(t_car *champ, t_core *core, int cycle)
 t_car	*time_oper(t_car *champ)
 {
 	if (champ && champ->time < 1)
-		champ->time = g_arena[champ->pc]  > 0 && g_arena[champ->pc]  < 17 ? g_op_tab[g_arena[champ->pc] - 1].time : 0;
+		champ->time = g_arena[champ->pc] > 0 &&
+		g_arena[champ->pc] < 17 ? g_op_tab[g_arena[champ->pc] - 1].time : 0;
 	if (champ && champ->time > 0)
 		champ->time = champ->time - 1;
 	return (champ);
 }
 
+t_game	*init_game_str(t_game *game, t_core *champ)
+{
+	game->cycle = 0;
+	game->i = 1;
+	game->cycles_to_die = CYCLE_TO_DIE;
+	game->nbr_live = 0;
+	game->checks = 0;
+	game->last = 0;
+	game->end_cycle = game->cycles_to_die;
+	game->num_champ = champ->num_ch;
+	return (game);
+}
+
+void	check_cycle_die(t_core *champ, t_game *game)
+{
+	champ->player =
+	check_die(champ->player, game->cycle, game->cycles_to_die, champ);
+	if (game->nbr_live >= NBR_LIVE || game->checks >= MAX_CHECKS)
+	{
+		game->cycles_to_die = game->cycles_to_die - CYCLE_DELTA;
+		game->checks = 0;
+	}
+	else
+		game->checks++;
+	game->end_cycle = game->cycle + game->cycles_to_die;
+	game->nbr_live = 0;
+}
+
+void	game_play(t_core *champ, t_game *game, t_car *start)
+{
+	if (champ->player)
+		champ->player = time_oper(champ->player);
+	if (champ->player && champ->player->time == 0)
+	{
+		champ->player = parse_func_champ(champ->player, champ, game->cycle);
+		if (g_arena[champ->player->pc] == 1)
+			game->nbr_live++;
+	}
+	if (champ->player)
+	{
+		champ->player = champ->player->next;
+		game->i++;
+	}
+	if (!champ->player || game->i == game->num_champ + 1)
+	{
+		game->num_champ = champ->num_ch;
+		champ->player = start;
+		game->cycle++;
+		game->i = 1;
+	}
+}
+
 void	game_start(t_core *champ)
 {
-	int cycle =0;
-	unsigned int i =1;
-	int cycles_to_die = CYCLE_TO_DIE;
-	int nbr_live =0;
-	int checks = 0;
-	int last = 0;
-	int end_cycle = cycles_to_die;
-	t_car *buf;
-	int num_champ = champ->num_ch;
-	t_car *start = champ->player;
-	while (champ->player && cycle != champ->d_cycle)
+	t_game	*game;
+	t_car	*buf;
+	t_car	*start;
+
+	game = malloc(sizeof(t_game));
+	game = init_game_str(game, champ);
+	start = champ->player;
+	while (champ->player && game->cycle != champ->d_cycle)
 	{
-		if ((cycles_to_die <= 0) || (cycle == end_cycle))
+		if ((game->cycles_to_die <= 0) || (game->cycle == game->end_cycle))
 		{
-			champ->player = check_die(champ->player,cycle,cycles_to_die,champ);
+			check_cycle_die(champ, game);
 			start = champ->player;
-			if (nbr_live >= NBR_LIVE || checks >= MAX_CHECKS)
-			{
-				cycles_to_die = cycles_to_die - CYCLE_DELTA;
-				checks = 0;
-			}
-			else
-				checks++;
-			end_cycle = cycle + cycles_to_die;
-			nbr_live = 0;
 		}
-		if (champ->player)
-			champ->player = time_oper(champ->player);
-		if (champ->player && champ->player->time == 0)
-		{
-			champ->player = parse_func_champ(champ->player,champ,cycle);
-			if (g_arena[champ->player->pc] == 1)
-				nbr_live++;
-		}
-		if (champ->player)
-		{
-			champ->player = champ->player->next;
-			i++;
-		}
-		if (!champ->player || i == num_champ + 1)
-		{
-			num_champ = champ->num_ch;
-			champ->player = start;
-			cycle++;
-			i = 1;
-		}
+		game_play(champ, game, start);
 	}
-	if (champ->d_cycle == cycle)
+	if (champ->d_cycle == game->cycle)
 	{
-		print_hello(champ);
+		print_hello(champ, -1);
 		print_arena(champ->dump);
 	}
+	free(game);
 }

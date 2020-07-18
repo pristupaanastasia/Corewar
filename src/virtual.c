@@ -1,81 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   virtual.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/18 16:41:09 by mriley            #+#    #+#             */
+/*   Updated: 2020/07/18 16:50:32 by mriley           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char g_arena[MEM_SIZE];
-extern t_op    g_op_tab[17];
+char			g_arena[MEM_SIZE];
+extern t_op		g_op_tab[17];
 
-
-t_car *time_to_die(t_car *car)
+t_car			*time_to_die(t_car *car)
 {
-	t_car *new;
+	t_car	*new;
 
 	new = car->next;
 	free(car);
-	return(new);
+	return (new);
 }
 
-t_car *check_die(t_car *car, int cycle, int cycles_to_die,t_core *champ)
+t_car			*check_die(t_car *car, int cycle,
+int cycles_to_die, t_core *champ)
 {
-	t_car *buf;
-	int i;
+	t_car	*buf;
+	int		i;
 
 	i = 0;
 	buf = car;
-	while (car && (car->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
+	while (car && (car->cycle_live < cycle - cycles_to_die
+	|| (cycles_to_die <= 0)))
 	{
 		if (car && !car->next)
-		{
-			print_hello(champ);
-			ft_printf("Contestant %d has won !\n",car->num);
-		}
+			print_hello(champ, car->num);
 		car = time_to_die(car);
 		champ->num_ch = champ->num_ch - 1;
 	}
 	buf = car;
-	while(car && car->next)
+	while (car && car->next)
 	{
-		while (car && car->next && (car->next->cycle_live < cycle - cycles_to_die || (cycles_to_die <= 0 )))
+		while (car && car->next && (car->next->cycle_live
+		< cycle - cycles_to_die || (cycles_to_die <= 0)))
 		{
 			car->next = time_to_die(car->next);
 			champ->num_ch = champ->num_ch - 1;
 		}
 		car = car->next;
 	}
-	return(buf);
+	return (buf);
 }
 
-unsigned int change_arena(t_champ champ, int n,int num_ch)
+unsigned int	change_arena(t_champ champ, int n, int num_ch)
 {
-	unsigned int start;
-	unsigned int i;
+	unsigned int	start;
+	unsigned int	i;
 
-	start = (MEM_SIZE / num_ch) * (n-1);
+	start = (MEM_SIZE / num_ch) * (n - 1);
 	i = 0;
-	while(i < champ.mem.prog_size)
+	while (i < champ.mem.prog_size)
 	{
 		g_arena[start + i] = champ.code[i];
 		i++;
 	}
-	return(start);
+	return (start);
 }
 
-t_car *init_reg(t_car *car)
+t_car			*init_reg(t_car *car)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
-	i =0;
-	j =0;
-	while(i <= REG_NUMBER )
+	i = 0;
+	j = 0;
+	while (i <= REG_NUMBER)
 	{
-		while(j < REG_SIZE)
+		while (j < REG_SIZE)
 		{
 			car->reg[i].reg[j] = '\0';
 			j++;
 		}
-		j=0;
+		j = 0;
 		i++;
 	}
-	return(car);
-
+	return (car);
 }

@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 21:10:47 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/16 17:04:10 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/18 17:06:52 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ t_car	*ft_sti(t_car *car)
 	if ((g_arena[car->pc + 1] & 0x0c) == 0x04 && g_arena[car->pc + i] > 0
 	&& g_arena[car->pc + i] <= REG_NUMBER)
 		in2 = to_int_from_reg(car, g_arena[car->pc + i]);
-	i = i + arg[1];
 	if (g_arena[car->pc + 2] > 0 && g_arena[car->pc + 2] <= REG_NUMBER)
 	{
 		reg1 = to_int_from_reg(car, g_arena[car->pc + 2]);
