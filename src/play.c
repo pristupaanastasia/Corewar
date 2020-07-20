@@ -6,15 +6,13 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 19:19:12 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/18 16:46:09 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:13:29 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char			g_arena[MEM_SIZE];
-extern t_op		g_op_tab[17];
 
 t_car	*parse_func_champ(t_car *champ, t_core *core, int cycle)
 {
@@ -97,7 +95,7 @@ void	game_start(t_core *champ)
 	t_car	*buf;
 	t_car	*start;
 
-	game = malloc(sizeof(t_game));
+	game = ft_memalloc(sizeof(t_game));
 	game = init_game_str(game, champ);
 	start = champ->player;
 	while (champ->player && game->cycle != champ->d_cycle)

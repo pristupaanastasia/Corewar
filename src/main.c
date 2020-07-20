@@ -6,15 +6,14 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:08:38 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/14 21:10:16 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:18:17 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char			g_arena[MEM_SIZE];
-extern t_op		g_op_tab[17];
+
 
 int		*parse_num_two(int *nums, int j, int i, int max)
 {
@@ -52,7 +51,7 @@ int		*parse_num(char **argv, int n)
 
 	i = 0;
 	j = 0;
-	nums = malloc(4 * sizeof(int));
+	nums = ft_memalloc(4 * sizeof(int));
 	while (i < 4)
 		nums[i++] = -1;
 	i = 1;
@@ -75,7 +74,7 @@ t_core	*init_champ_two(void)
 {
 	t_core	*champ;
 
-	champ = malloc(sizeof(t_core));
+	champ = ft_memalloc(sizeof(t_core));
 	champ->player = NULL;
 	champ->d_cycle = -1;
 	champ->dump = DUMP;
@@ -118,6 +117,7 @@ int		main(int arc, char **argv)
 	int		n;
 	int		i;
 
+	ft_bzero(&g_arena, MEM_SIZE);
 	champ = init_champ(arc - 1, argv);
 	n = champ->num_ch;
 	arena_set(champ);

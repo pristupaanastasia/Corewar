@@ -6,14 +6,14 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 21:10:47 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/18 17:06:52 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 16:16:47 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
 
-extern char	g_arena[MEM_SIZE];
+
 
 int		ret_asm_in1(int code, int i, t_car *car)
 {

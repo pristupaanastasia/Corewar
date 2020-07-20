@@ -6,13 +6,13 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 16:53:48 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/16 17:12:36 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 16:21:35 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 
-extern char	g_arena[MEM_SIZE];
+
 
 t_car	*ft_lldi(t_car *car)
 {
@@ -22,7 +22,7 @@ t_car	*ft_lldi(t_car *car)
 	int		i;
 
 	i = 2;
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	in1 = ret_asm_in1(g_arena[car->pc + 1] & 0xc0, i, car);
 	i = i + arg[0];
@@ -50,7 +50,7 @@ t_car	*ft_lfork(t_car *car)
 	int		j;
 	int		in1;
 
-	copy = malloc(sizeof(t_car));
+	copy = ft_memalloc(sizeof(t_car));
 	start = car;
 	i = 0;
 	j = 0;
@@ -93,7 +93,7 @@ t_car	*ft_fork(t_car *car)
 	int		j;
 	int		in1;
 
-	copy = malloc(sizeof(t_car));
+	copy = ft_memalloc(sizeof(t_car));
 	start = car;
 	i = 0;
 	j = 0;

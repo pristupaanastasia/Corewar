@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 16:59:40 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/18 17:23:35 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:11:00 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 
 # define HEAD_SIZE COMMENT_LENGTH+PROG_NAME_LENGTH+CHAMP_MAX_SIZE + 10
 # define DUMP 64
+
+char g_arena[MEM_SIZE];
 
 typedef struct	s_champ
 {
@@ -73,6 +75,8 @@ typedef struct	s_op
 	int				re_carry;
 	t_car			*(*f)(t_car *car);
 }				t_op;
+
+extern t_op		g_op_tab[17];
 
 typedef struct	s_game
 {

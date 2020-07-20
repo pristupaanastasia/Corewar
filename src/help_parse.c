@@ -6,15 +6,15 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:05:37 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/18 16:45:36 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:08:07 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char		g_arena[MEM_SIZE];
-extern t_op	g_op_tab[17];
+
+
 
 t_core	*read_champ(char *s, t_core *core, int num)
 {

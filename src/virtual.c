@@ -6,15 +6,14 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 16:41:09 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/18 16:50:32 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:09:00 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char			g_arena[MEM_SIZE];
-extern t_op		g_op_tab[17];
+
 
 t_car			*time_to_die(t_car *car)
 {

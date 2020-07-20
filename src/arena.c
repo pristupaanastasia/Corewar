@@ -6,15 +6,13 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 19:04:15 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/14 20:01:57 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:15:25 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
 
-char			g_arena[MEM_SIZE];
-extern t_op		g_op_tab[17];
 
 t_car	*init_champions(t_car *player, int j, t_core *champ)
 {
@@ -25,7 +23,7 @@ t_car	*init_champions(t_car *player, int j, t_core *champ)
 	player->carry = 0;
 	player = init_reg(player);
 	player = to_reg_from_int(player, 1, -player->num);
-	player->next = malloc(sizeof(t_car));
+	player->next = ft_memalloc(sizeof(t_car));
 	return (player);
 }
 
@@ -62,7 +60,7 @@ void	arena_set(t_core *champ)
 	i = champ->num_ch;
 	j = champ->num_ch - 1;
 	car = 0;
-	champ->player = malloc(sizeof(t_car));
+	champ->player = ft_memalloc(sizeof(t_car));
 	start = champ->player;
 	while (i > 0)
 	{

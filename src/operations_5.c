@@ -6,13 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 17:57:02 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/16 18:40:03 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:13:16 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 
-extern char g_arena[MEM_SIZE];
 
 int		ret_asm_in1_four(int code, int i, t_car *car)
 {
@@ -61,7 +60,7 @@ t_car	*ft_and(t_car *car)
 	int		in2;
 	int		i;
 
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	in1 = ret_asm_in1_four(g_arena[car->pc + 1] & 0xc0, 2, car);
 	i = 2 + arg[0];
@@ -84,7 +83,7 @@ t_car	*ft_or(t_car *car)
 	int		in1;
 	int		in2;
 
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	in1 = ret_asm_in1_four(g_arena[car->pc + 1] & 0xc0, 2, car);
 	i = 2 + arg[0];
@@ -107,7 +106,7 @@ t_car	*ft_xor(t_car *car)
 	int in1;
 	int in2;
 
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	in1 = ret_asm_in1_four(g_arena[car->pc + 1] & 0xc0, 2, car);
 	i = 2 + arg[0];

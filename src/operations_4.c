@@ -6,13 +6,13 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 17:21:07 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/16 17:31:18 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:12:36 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 
-extern char	g_arena[MEM_SIZE];
+
 
 t_car	*ft_st(t_car *car)
 {
@@ -20,7 +20,7 @@ t_car	*ft_st(t_car *car)
 	int		in1;
 	int		in2;
 
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	if (arg[0] == 1 && (arg[1] == 1 || arg[1] == 2))
 	{
@@ -49,7 +49,7 @@ t_car	*ft_add(t_car *car)
 	int		reg1;
 	int		reg2;
 
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	if (g_arena[car->pc + 2] > 0 && g_arena[car->pc + 2] <= REG_NUMBER &&
 	g_arena[car->pc + 3] > 0 && g_arena[car->pc + 3] <= REG_NUMBER &&
@@ -75,7 +75,7 @@ t_car	*ft_sub(t_car *car)
 
 	reg1 = 0;
 	reg2 = 0;
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	if (g_arena[car->pc + 2] > 0 && g_arena[car->pc + 2] <= REG_NUMBER &&
 	g_arena[car->pc + 3] > 0 && g_arena[car->pc + 3] <= REG_NUMBER &&
