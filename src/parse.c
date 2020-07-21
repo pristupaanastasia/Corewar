@@ -6,13 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 18:40:32 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:17:29 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:00:43 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
-
 
 extern t_op		g_op_tab[17];
 
@@ -77,6 +76,8 @@ t_core	*code_champ(t_core *champ, int num, int i)
 	ft_memalloc(champ->champions[num].mem.prog_size + 1);
 	while (j < champ->champions[num].mem.prog_size)
 		champ->champions[num].code[j++] = champ->champions[num].buf[i++];
+	if (champ->champions[num].buf[i] != '\0' || i != champ->end)
+		ft_error(EFBIG, -1);
 	champ->champions[num].code[j] = '\0';
 	return (champ);
 }

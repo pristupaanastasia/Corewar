@@ -6,13 +6,11 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 17:12:59 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 16:16:06 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:01:11 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
-
-
 
 void	copy_to_arena(int start, int copy)
 {

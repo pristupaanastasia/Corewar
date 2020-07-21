@@ -6,14 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 16:41:09 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:09:00 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:00:23 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
-
-
 
 t_car			*time_to_die(t_car *car)
 {

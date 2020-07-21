@@ -6,12 +6,11 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 17:57:02 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:13:16 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:01:01 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
-
 
 int		ret_asm_in1_four(int code, int i, t_car *car)
 {

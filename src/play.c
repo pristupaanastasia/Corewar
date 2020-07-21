@@ -6,26 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 19:19:12 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:13:29 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:02:18 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
-
-
-t_car	*parse_func_champ(t_car *champ, t_core *core, int cycle)
-{
-	if (g_arena[champ->pc] == 1)
-		champ->cycle_live = cycle;
-	if (g_arena[champ->pc] == 15 || g_arena[champ->pc] == 12)
-		core->num_ch = core->num_ch + 1;
-	if (g_arena[champ->pc] > 0 && g_arena[champ->pc] < 17)
-		g_op_tab[g_arena[champ->pc] - 1].f(champ);
-	else
-		champ->pc = (champ->pc + 1) % MEM_SIZE;
-	return (champ);
-}
 
 t_car	*time_oper(t_car *champ)
 {

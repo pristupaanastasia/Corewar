@@ -6,14 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 21:10:47 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 16:16:47 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:03:07 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
-
-
 
 int		ret_asm_in1(int code, int i, t_car *car)
 {
@@ -59,25 +57,6 @@ int		ret_asm_in2(int code, int i, t_car *car)
 			in1 = to_int_from_reg(car, g_arena[car->pc + i]);
 	}
 	return (in1);
-}
-
-t_car	*ft_zjmp(t_car *car)
-{
-	int		indir;
-
-	indir = to_int(g_arena[car->pc + 1], g_arena[car->pc + 2]);
-	if (indir != 0 && car->carry == 1)
-	{
-		if ((car->pc + (indir % IDX_MOD)) % MEM_SIZE >= 0)
-			car->pc = (car->pc + (indir % IDX_MOD)) % MEM_SIZE;
-		else
-			car->pc = MEM_SIZE + (car->pc + (indir % IDX_MOD)) % MEM_SIZE;
-	}
-	else
-	{
-		car->pc = (car->pc + 3) % MEM_SIZE;
-	}
-	return (car);
 }
 
 t_car	*ft_ldi(t_car *car)

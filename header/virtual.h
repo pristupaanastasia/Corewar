@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/18 16:59:40 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:11:00 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:04:19 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct	s_core
 	t_champ			champions[4];
 	int				dump;
 	int				d_cycle;
+	int				end;
 }				t_core;
 
 typedef struct	s_op
@@ -142,4 +143,6 @@ int				ret_asm_in1(int code, int i, t_car *car);
 int				ret_asm_in2(int code, int i, t_car *car);
 int				ret_asm_in1_four(int code, int i, t_car *car);
 int				ret_asm_in2_four(int code, int i, t_car *car);
+t_car			*parse_func_champ(t_car *champ, t_core *core, int cycle);
+t_car			*init_champions(t_car *player, int j, t_core *champ);
 #endif

@@ -6,15 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:05:37 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:08:07 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:00:35 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
-
-
-
 
 t_core	*read_champ(char *s, t_core *core, int num)
 {
@@ -27,7 +24,7 @@ t_core	*read_champ(char *s, t_core *core, int num)
 	line = malloc(2);
 	line[1] = '\0';
 	j = 0;
-	core->champions[num].buf = malloc(MEM_SIZE);
+	core->champions[num].buf = ft_memalloc(MEM_SIZE);
 	if ((fd = open(s, O_RDONLY)) == -1 || !core->champions[num].buf)
 		ft_error(EADDRNOTAVAIL, -3);
 	endfile = lseek(fd, 0, SEEK_END);
@@ -40,6 +37,7 @@ t_core	*read_champ(char *s, t_core *core, int num)
 		j++;
 	}
 	core->champions[num].buf[j] = '\0';
+	core->end = j;
 	free(line);
 	return (core);
 }

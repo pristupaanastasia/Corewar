@@ -6,26 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 19:04:15 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:15:25 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:02:44 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
-
-
-t_car	*init_champions(t_car *player, int j, t_core *champ)
-{
-	player->num = champ->champions[j].num;
-	player->pc = change_arena(champ->champions[j], player->num, champ->num_ch);
-	player->time = -1;
-	player->cycle_live = -1;
-	player->carry = 0;
-	player = init_reg(player);
-	player = to_reg_from_int(player, 1, -player->num);
-	player->next = ft_memalloc(sizeof(t_car));
-	return (player);
-}
 
 t_car	*help_arena_set(t_car *player, t_core *champ, int j)
 {

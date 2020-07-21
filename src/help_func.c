@@ -6,13 +6,11 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:02:30 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 16:16:34 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:00:28 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
-
-
 
 int		to_int(char a, char b)
 {

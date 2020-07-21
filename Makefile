@@ -6,7 +6,7 @@ LIB_PRINTF = ./ft_printf/libftprintf.a
 NAME_LIB 			= libft/libft.a
 GCC_LIBFT 			= -L ./libft -l ft
 GCC_FT_PRINTF		= -L ./ft_printf -l ft
-SRC = virtual.c op.c operations.c operations_2.c operations_3.c operations_4.c operations_5.c arena.c help_func.c help_parse.c main.c parse.c play.c 
+SRC = virtual.c op.c operations.c operations_2.c operations_3.c operations_4.c operations_5.c arena.c help_func.c help_parse.c main.c parse.c play.c help_play.c
 SRC_DIR 			= ./src/
 OBJ_DIR 			= ./obj/
 

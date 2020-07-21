@@ -6,14 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:08:38 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/20 17:18:17 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:00:05 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/virtual.h"
 #include <stdio.h>
-
-
 
 int		*parse_num_two(int *nums, int j, int i, int max)
 {

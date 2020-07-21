@@ -6,13 +6,12 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2020/07/20 17:09:15 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/21 17:00:52 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/op.h"
 #include "../header/virtual.h"
-
 
 t_op	g_op_tab[17] =
 {
