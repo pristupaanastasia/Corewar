@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:02:30 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:00:28 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 17:56:19 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int		to_int_size(int start, int size)
 	n = 0;
 	while (i < size)
 	{
-		n = (int)g_arena[start + i];
+		n = (int)g_arena[(start + i) % MEM_SIZE];
 		n = n & 0x000000ff;
 		solve = solve | n;
 		i++;

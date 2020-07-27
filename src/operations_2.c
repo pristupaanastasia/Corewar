@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 16:53:48 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:01:15 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 16:15:56 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_car	*ft_lldi(t_car *car)
 		car = to_reg_from_int(car, g_arena[car->pc + i], in1);
 	car->carry = in1 == 0 ? 1 : 0;
 	car->pc = (car->pc + 2 + arg[0] + arg[1]) % MEM_SIZE;
+	free(arg);
 	return (car);
 }
 

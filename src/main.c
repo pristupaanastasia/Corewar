@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:08:38 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:00:05 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 17:50:21 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int		*parse_num(char **argv, int n)
 	{
 		if (ft_strstr(argv[i], ".cor"))
 			j++;
-		if (ft_strequ(argv[i], "-n") == 1)
+		if (ft_strequ(argv[i], "-n") == 1 && i + 1 < n)
 			nums[j] = ft_atoi(argv[++i]);
 		i++;
 	}

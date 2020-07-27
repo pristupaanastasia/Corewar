@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 17:21:07 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:01:05 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 17:57:31 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ t_car	*ft_st(t_car *car)
 	{
 		if (g_arena[car->pc + 2] > 0 && g_arena[car->pc + 2] <= REG_NUMBER)
 			in1 = to_int_from_reg(car, g_arena[car->pc + 2]);
-		if (arg[1] == 1 && g_arena[car->pc + 3] > 0 &&
-		g_arena[car->pc + 3] <= REG_NUMBER)
+		if (g_arena[car->pc + 3] > 0 && g_arena[car->pc + 3] <= REG_NUMBER)
 			car = to_reg_from_int(car, g_arena[car->pc + 3], in1);
 		else
 		{
@@ -33,7 +32,8 @@ t_car	*ft_st(t_car *car)
 			if (g_arena[car->pc + 2] > 0 && g_arena[car->pc + 2] <= REG_NUMBER)
 				((car->pc + (in2 % IDX_MOD)) % MEM_SIZE >= 0) ?
 				copy_to_arena((car->pc + (in2 % IDX_MOD)) % MEM_SIZE, in1) :
-				copy_to_arena(MEM_SIZE + (car->pc + (in2 % IDX_MOD)), in1);
+				copy_to_arena(MEM_SIZE + (car->pc + (in2 % IDX_MOD)) %
+				MEM_SIZE, in1);
 		}
 	}
 	car->pc = (car->pc + 2 + arg[0] + arg[1]) % MEM_SIZE;

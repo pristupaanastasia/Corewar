@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 17:12:59 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:01:11 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 17:43:50 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	copy_to_arena(int start, int copy)
 	i = 0;
 	while (i < 4)
 	{
-		g_arena[start + 3 - i] = (char)(copy & 0x000000ff);
+		g_arena[(start + 3 - i) % MEM_SIZE] = (char)(copy & 0x000000ff);
 		i++;
 		copy = copy >> 8;
 	}
@@ -63,7 +63,7 @@ t_car	*ft_ld(t_car *car)
 	int		in1;
 	int		i;
 
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
 	if ((arg[0] == 4 || arg[0] == 2) && arg[1] == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 21:10:47 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:03:07 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 17:59:47 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ int		ret_asm_in2(int code, int i, t_car *car)
 	if (code == 0x30)
 	{
 		in1 = to_int(g_arena[car->pc + i], g_arena[car->pc + i + 1]);
-		if (((car->pc + in1 % IDX_MOD)) >= 0)
-			in1 = to_int_size((car->pc + in1 % IDX_MOD), 4);
+		if (((car->pc + in1 % IDX_MOD) % MEM_SIZE) >= 0)
+			in1 = to_int_size((car->pc + in1 % IDX_MOD) % MEM_SIZE, 4);
 		else
-			in1 = to_int_size(MEM_SIZE + (car->pc + in1 % IDX_MOD),
+			in1 = to_int_size(MEM_SIZE + (car->pc + in1 % IDX_MOD) % MEM_SIZE,
 			4);
 	}
 	if (code == 0x20)
@@ -67,7 +67,7 @@ t_car	*ft_ldi(t_car *car)
 	int		in2;
 
 	i = 2;
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 2);
 	in1 = ret_asm_in1(g_arena[car->pc + 1] & 0xc0, i, car);
 	i = i + arg[0];
@@ -95,7 +95,7 @@ t_car	*ft_sti(t_car *car)
 	int		reg1;
 	int		i;
 
-	arg = malloc(sizeof(int) * 3);
+	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 2);
 	in1 = ret_asm_in2(g_arena[car->pc + 1] & 0x30, 3, car);
 	i = 3 + arg[1];

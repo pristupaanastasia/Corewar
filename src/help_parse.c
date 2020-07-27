@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 20:05:37 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:00:35 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 17:56:03 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	print_hello(t_core *champ, int n)
 		champ->champions[i].mem.prog_name, champ->champions[i].mem.comment);
 		i++;
 	}
-	if (n > 0)
-		ft_printf("Contestant %d has won !\n", n);
+	if (n > 0 && n < 5)
+		ft_printf("Contestant %d, \"%s\", has won !\n", n,
+		champ->champions[n - 1].mem.prog_name);
 }
