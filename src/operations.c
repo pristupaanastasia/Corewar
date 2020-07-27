@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 21:10:47 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/27 17:59:47 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 21:21:08 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ t_car	*ft_ldi(t_car *car)
 		in2 = to_int_from_reg(car, g_arena[car->pc + i]);
 	i = i + arg[1];
 	in1 = (car->pc + (in1 + in2) % IDX_MOD) >= 0 ?
-	to_int_size((car->pc + (in1 + in2) % IDX_MOD) % MEM_SIZE, 4) :
-	to_int_size(MEM_SIZE + (car->pc + (in1 + in2) % IDX_MOD) % MEM_SIZE, 4);
+	to_int_size((car->pc + (in1 + in2) % IDX_MOD), 4) :
+	to_int_size(MEM_SIZE + (car->pc + (in1 + in2) % IDX_MOD), 4);
 	if (g_arena[car->pc + i] > 0 && g_arena[car->pc + i] <= REG_NUMBER)
 		car = to_reg_from_int(car, g_arena[car->pc + i], in1);
 	car->pc = (car->pc + 2 + arg[0] + arg[1] + arg[2]) % MEM_SIZE;

@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/16 17:21:07 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/27 17:57:31 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 21:49:37 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ t_car	*ft_st(t_car *car)
 
 	arg = ft_memalloc(sizeof(int) * 3);
 	arg = read_arg(arg, g_arena[car->pc + 1], 4);
-	if (arg[0] == 1 && (arg[1] == 1 || arg[1] == 2))
+	if (arg[0] == 1 && (arg[1] == 1 || arg[1] == 2) &&
+	g_arena[car->pc + 2] > 0 && g_arena[car->pc + 2] <= REG_NUMBER)
 	{
-		if (g_arena[car->pc + 2] > 0 && g_arena[car->pc + 2] <= REG_NUMBER)
-			in1 = to_int_from_reg(car, g_arena[car->pc + 2]);
-		if (g_arena[car->pc + 3] > 0 && g_arena[car->pc + 3] <= REG_NUMBER)
+		in1 = to_int_from_reg(car, g_arena[car->pc + 2]);
+		if (arg[1] == 1 && g_arena[car->pc + 3] > 0
+		&& g_arena[car->pc + 3] <= REG_NUMBER)
 			car = to_reg_from_int(car, g_arena[car->pc + 3], in1);
 		else
 		{

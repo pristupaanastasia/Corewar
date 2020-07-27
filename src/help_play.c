@@ -6,7 +6,7 @@
 /*   By: mriley <mriley@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/21 17:01:52 by mriley            #+#    #+#             */
-/*   Updated: 2020/07/21 17:03:17 by mriley           ###   ########.fr       */
+/*   Updated: 2020/07/27 21:26:45 by mriley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_car	*ft_zjmp(t_car *car)
 	int		indir;
 
 	indir = to_int(g_arena[car->pc + 1], g_arena[car->pc + 2]);
-	if (indir != 0 && car->carry == 1)
+	if (car->carry == 1)
 	{
 		if ((car->pc + (indir % IDX_MOD)) % MEM_SIZE >= 0)
 			car->pc = (car->pc + (indir % IDX_MOD)) % MEM_SIZE;
